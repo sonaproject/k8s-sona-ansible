@@ -1,0 +1,4 @@
+# Install openvswitch with kernel-modules
+- hosts: localhost
+  roles:
+    - ovs

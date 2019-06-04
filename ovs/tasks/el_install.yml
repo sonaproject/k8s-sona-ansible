@@ -1,0 +1,11 @@
+---
+  - block:
+    - name: Make for CentOS/RedHat
+      command: rpmbuild -bb --without check -D "kversion `uname -r`" rhel/openvswitch.spec
+      args:
+        chdir: "{{ el_dir }}"
+      environment:
+        RPMBUILD_OPT: '--without check'
+      become: true
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

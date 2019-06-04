@@ -1,0 +1,55 @@
+---
+ovs_version: 2.10.2
+ovs_file: "openvswitch-{{ovs_version}}"
+ovs_package: "{{ovs_file}}.tar.gz"
+ovs_url: "http://openvswitch.org/releases/{{ovs_package}}"
+el_base_dir: /root/rpmbuild/SOURCES/
+el_dir: "{{el_base_dir}}{{ovs_file}}"
+deb_base_dir: /root/
+deb_dir: "{{deb_base_dir}}{{ovs_file}}"
+generic_deps:
+  - autoconf
+  - automake
+  - bzip2
+  - openssl
+  - procps
+  - wget
+  - gcc
+  - perl
+el_deps:
+  - make
+  - openssl-devel
+  - kernel-devel
+  - kernel-debug-devel
+  - rpm-build
+  - redhat-rpm-config
+  - libtool
+  - checkpolicy
+  - selinux-policy-devel
+  - autoconf
+  - automake
+  - systemd-units
+  - openssl
+  - python
+  - python-devel
+  - python-sphinx
+  - python-twisted-core
+  - python-six
+  - desktop-file-utils
+  - groff
+  - graphviz
+  - procps-ng
+  - libcap-ng
+  - libcap-ng-devel
+  - unbound
+  - unbound-devel
+epel_repos:
+  - epel-release
+python_libs:
+  - six
+  - sphinx
+  - twisted
+el_ovs_packages:
+  - "{{el_dir}}/rpm/rpmbuild/RPMS/x86_64/openvswitch-2.10.2-1.x86_64.rpm"
+  - "{{el_dir}}/rpm/rpmbuild/RPMS/x86_64/openvswitch-devel-2.10.2-1.x86_64.rpm"
+  - "{{el_dir}}/rpm/rpmbuild/RPMS/noarch/openvswitch-selinux-policy-2.10.2-1.noarch.rpm"

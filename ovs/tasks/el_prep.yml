@@ -1,0 +1,44 @@
+---
+  - block:
+    - name: Create directory for CentOS/RedHat
+      file:
+        path: "{{ el_base_dir }}"
+        state: directory
+      become: true
+
+    - name: Copy archive for CentOS/RedHat
+      copy:
+        remote_src: true
+        src: "/tmp/{{ ovs_package }}"
+        dest: "{{ el_base_dir }}"
+      become: true
+
+    - name: Unpack OVS for CentOS/RedHat
+      unarchive: src=/tmp/{{ ovs_package }} dest={{ el_base_dir }}
+      become: true
+
+    - name: Yum update
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+        exclude: kernel*
+      become: true
+
+    - name: Add EPEL repos
+      yum:
+        name: "{{ item }}"
+        state: installed
+        update_cache: yes
+      become: true
+      with_items: "{{ epel_repos }}"
+
+    - name: Install CentOS/RedHat OVS dependencies
+      yum:
+        name: "{{ item }}"
+        state: installed
+        update_cache: yes
+      become: true
+      with_items: "{{ el_deps }}"
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
