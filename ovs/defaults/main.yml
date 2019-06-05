@@ -1,52 +1,17 @@
 ---
+os_dist: centos
+os_version: 7
 ovs_version: 2.10.2
-kernel_version: 3.10.0-957.el7
-ovs_file: "openvswitch-{{ovs_version}}"
-ovs_package: "{{ovs_file}}.tar.gz"
-ovs_url: "http://openvswitch.org/releases/{{ovs_package}}"
-el_base_dir: /root/rpmbuild/SOURCES/
-el_dir: "{{el_base_dir}}{{ovs_file}}"
-generic_deps:
-  - autoconf
-  - automake
-  - bzip2
-  - openssl
-  - procps
-  - wget
-  - gcc
-  - perl
-el_deps:
-  - make
-  - openssl-devel
-  - kernel-headers-{{kernel_version}}
-  - kernel-devel-{{kernel_version}}
-  - kernel-debug-devel-{{kernel_version}}
-  - rpm-build
-  - redhat-rpm-config
-  - libtool
-  - checkpolicy
-  - selinux-policy-devel
-  - autoconf
-  - automake
-  - systemd-units
-  - openssl
-  - python
-  - python-devel
-  - python-sphinx
-  - python-twisted-core
-  - python-six
-  - desktop-file-utils
-  - groff
-  - graphviz
-  - procps-ng
-  - libcap-ng
-  - libcap-ng-devel
-  - unbound
-  - unbound-devel
-epel_repos:
-  - epel-release
+kernel_version: 3.10.0-957
+ovs_repo_prefix: "https://github.com/sonaproject/openvswitch-distro/raw/master"
+ovs_repo_path: "{{ovs_repo_prefix}}/{{os_dist}}/{{os_version}}/{{ovs_version}}"
+ovs_package: "openvswitch-{{ovs_version}}-1.x86_64.rpm"
+ovs_devel_package: "openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
+ovs_selinux_package: "openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
+ovs_kmod_package: "openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
+el_tmp: "/tmp"
 el_ovs_packages:
-  - "/root/rpmbuild/RPMS/x86_64/openvswitch-{{ovs_version}}-1.x86_64.rpm"
-  - "/root/rpmbuild/RPMS/x86_64/openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
-  - "/root/rpmbuild/RPMS/x86_64/openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
-  - "/root/rpmbuild/RPMS/noarch/openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
+    - "{{el_tmp}}/{{ovs_package}}"
+    - "{{el_tmp}}/{{ovs_devel_package}}"
+    - "{{el_tmp}}/{{ovs_selinux_package}}"
+    - "{{el_tmp}}/{{ovs_kmod_package}}"
