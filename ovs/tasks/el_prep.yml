@@ -38,5 +38,10 @@
         state: installed
         update_cache: yes
       become: true
+    
+    - name: Put SELinux in permissive mode
+      selinux:
+        policy: targeted
+        state: permissive
 
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

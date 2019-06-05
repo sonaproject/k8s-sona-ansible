@@ -12,8 +12,50 @@
       command: rpmbuild -bb --without check -D "kversion `uname -r`" rhel/openvswitch-kmod-fedora.spec
       args:
         chdir: "{{ el_dir }}"
+        creates: "/root/rpmbuild/RPMS/x86_64/openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
       environment:
         RPMBUILD_OPT: '--without check'
+      become: true
+
+    - name: Install OVS userplane with kernel modules
+      yum:
+        name: "{{ el_ovs_packages }}"
+        state: installed
+      become: true
+
+    - name: Open OVSDB port
+      command: sed -i '/set ovsdb-server \"$DB_FILE\"/a \        set \"$@\" --remote=ptcp:6650' /usr/share/openvswitch/scripts/ovs-ctl
+      become: true
+    
+    - name: Start and enable OVS daemon
+      service:
+        name: openvswitch
+        state: started
+        enabled: yes
+      become: true
+
+    - name: Restart OVS daemon
+      service:
+        name: openvswitch
+        state: restarted
+      become: true
+
+    - name: Probe OVS module
+      modprobe:
+        name: openvswitch
+        state: present
+      become: true
+
+    - name: Probe VXLAN module
+      modprobe:
+        name: vxlan
+        state: present
+      become: true
+
+    - name: Probe GENEVE module
+      modprobe:
+        name: geneve
+        state: present
       become: true
 
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
