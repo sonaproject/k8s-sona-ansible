@@ -1,7 +1,15 @@
 ---
   - block:
-    - name: Make for CentOS/RedHat
+    - name: Make OVS userplane for CentOS/RedHat
       command: rpmbuild -bb --without check -D "kversion `uname -r`" rhel/openvswitch.spec
+      args:
+        chdir: "{{ el_dir }}"
+      environment:
+        RPMBUILD_OPT: '--without check'
+      become: true
+
+    - name: Make OVS kernel module for CentOS/RedHat
+      command: rpmbuild -bb --without check -D "kversion `uname -r`" rhel/openvswitch-kmod-fedora.spec
       args:
         chdir: "{{ el_dir }}"
       environment:
