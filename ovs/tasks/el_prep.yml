@@ -27,18 +27,16 @@
 
     - name: Add EPEL repos
       yum:
-        name: "{{ item }}"
+        name: "{{ epel_repos }}"
         state: installed
         update_cache: yes
       become: true
-      with_items: "{{ epel_repos }}"
 
     - name: Install CentOS/RedHat OVS dependencies
       yum:
-        name: "{{ item }}"
+        name: "{{ el_deps }}"
         state: installed
         update_cache: yes
       become: true
-      with_items: "{{ el_deps }}"
 
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

@@ -1,5 +1,6 @@
 ---
 ovs_version: 2.10.2
+kernel_version: 3.10.0-957.el7
 ovs_file: "openvswitch-{{ovs_version}}"
 ovs_package: "{{ovs_file}}.tar.gz"
 ovs_url: "http://openvswitch.org/releases/{{ovs_package}}"
@@ -17,8 +18,9 @@ generic_deps:
 el_deps:
   - make
   - openssl-devel
-  - kernel-devel
-  - kernel-debug-devel
+  - kernel-headers-{{kernel_version}}
+  - kernel-devel-{{kernel_version}}
+  - kernel-debug-devel-{{kernel_version}}
   - rpm-build
   - redhat-rpm-config
   - libtool
