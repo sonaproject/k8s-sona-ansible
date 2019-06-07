@@ -5,27 +5,10 @@
     - '{{ ansible_os_family }}.yml'
     - default.yml
 
-- name: Download openvswitch package
-  get_url:
-    url: "{{ovs_repo_path}}/{{ovs_package}}"
-    dest: "{{el_tmp}}/{{ovs_package}}"
-
-- name: Download openvswitch devel package
-  get_url:
-    url: "{{ovs_repo_path}}/{{ovs_devel_package}}"
-    dest: "{{el_tmp}}/{{ovs_devel_package}}"
-
-- name: Download openvswitch selinux package
-  get_url:
-    url: "{{ovs_repo_path}}/{{ovs_selinux_package}}"
-    dest: "{{el_tmp}}/{{ovs_selinux_package}}"
-
-- name: Download openvswitch kmod package
-  get_url:
-    url: "{{ovs_repo_path}}/kmod/{{kernel_version}}/{{ovs_kmod_package}}"
-    dest: "/tmp/{{ovs_kmod_package}}"
-
 - include_tasks: el_prep.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: el_download.yml
   when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
 
 - include_tasks: el_install.yml
