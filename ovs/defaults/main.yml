@@ -1,10 +1,9 @@
 ---
-os_dist: centos
 os_version: 7
 ovs_version: 2.10.2
 kernel_version: 3.10.0-957
 ovs_repo_prefix: "https://github.com/sonaproject/openvswitch-distro/raw/master"
-ovs_repo_path: "{{ovs_repo_prefix}}/{{os_dist}}/{{os_version}}/{{ovs_version}}"
+ovs_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{os_version}}/{{ovs_version}}"
 ovs_package: "openvswitch-{{ovs_version}}-1.x86_64.rpm"
 ovs_devel_package: "openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
 ovs_selinux_package: "openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
