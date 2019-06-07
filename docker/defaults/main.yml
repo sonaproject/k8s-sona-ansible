@@ -1,0 +1,5 @@
+---
+
+docker_version: 17.05
+systemd_dir: /lib/systemd/system
+system_env_dir: /etc/sysconfig

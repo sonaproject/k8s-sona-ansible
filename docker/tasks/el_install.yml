@@ -1,0 +1,8 @@
+---
+  - block:
+    - name: Install docker engine (RHEL/CentOS)
+      yum:
+        name: "docker-engine-{{ docker_version }}.*"
+        state: present
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

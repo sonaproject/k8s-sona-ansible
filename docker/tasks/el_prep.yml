@@ -1,0 +1,13 @@
+---
+  - block:
+    - name: Add Docker yum repository
+      yum_repository:
+        name: Docker
+        description: Docker Repository
+        file: docker
+        baseurl: https://yum.dockerproject.org/repo/main/centos/7/
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: https://yum.dockerproject.org/gpg
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
