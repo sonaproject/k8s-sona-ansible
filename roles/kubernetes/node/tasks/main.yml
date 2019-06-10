@@ -1,6 +1,6 @@
 ---
 - name: Install Kubernetes packages
-  include_tasks: pkg.yml
+  include_tasks: kube_pkg.yml
 
 - name: Disable system swap
   shell: "swapoff -a"
