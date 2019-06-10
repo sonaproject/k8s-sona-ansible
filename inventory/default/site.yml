@@ -1,4 +1,13 @@
-- hosts: localhost
+---
+- hosts: kube-cluster
+  gather_facts: yes
+  become: yes
   roles:
-    - docker
-    - ovs
+    - { role: docker, tags: docker }
+    - { role: ovs, tags: ovs }
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: kubernetes/master, tags: master }
