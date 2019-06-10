@@ -4,4 +4,8 @@
       shell: python setup.py install
       args:
         chdir: "{{ sona_cni_tmp_dir }}"
+    - name: Ensures SONA-CNI configuration directory exists
+      file: path=/etc/sona state=directory
+    - name: Copy default SONA-CNI configuration
+      template: src=sona-cni.conf.j2 dest=/etc/sona/sona-cni.conf
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
