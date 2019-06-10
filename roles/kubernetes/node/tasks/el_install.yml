@@ -1,0 +1,8 @@
+---
+  - block:
+    - name: Install kubernetes packages (RHEL/CentOS)
+      yum:
+        name: "{{ kube_pkgs }}"
+        update_cache: yes
+        state: latest
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
