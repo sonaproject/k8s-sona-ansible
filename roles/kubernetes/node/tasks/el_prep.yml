@@ -8,4 +8,8 @@
         baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
         enabled: yes
         gpgcheck: no
+    - name: Deactivate and remove firewalld
+      yum:
+        name: firewalld
+        state: absent
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
