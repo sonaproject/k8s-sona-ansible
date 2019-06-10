@@ -1,0 +1,7 @@
+---
+  - block:
+    - name: Install SONA-CNI
+      shell: python setup.py install
+      args:
+        chdir: "{{ sona_cni_tmp_dir }}"
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

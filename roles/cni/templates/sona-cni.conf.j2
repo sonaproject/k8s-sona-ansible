@@ -1,0 +1,25 @@
+# Configuration options for ONOS CNI plugin endpoint
+
+[onos]
+# (StrOpt) ONOS REST interface URL. This is a mandatory field.
+url_path = http://{{ master_ip | 192.168.1.1 }}:8181/onos/k8snetworking
+# (StrOpt) Username for authentication. This is a mandatory field.
+username = onos
+# (StrOpt) Password for authentication. This is a mandatory field.
+password = rocks
+
+[network]
+# (StrOpt) Default overlay network type (VXLAN, GRE, GENEVE). This is an optional field, VXLAN is the default value.
+type = {{ overlay_type | VXLAN }}
+# (StrOpt) Default segment identifier of the network. This is an optional field, 100 is the default value.
+segment_id = {{ segment_id | 100 }}
+# (StrOpt) External uplink interface name. This is a mandatory field.
+external_interface = {{ external_interface | eth1 }}
+# (StrOpt) External gateway IP address. This is a mandatory field.
+external_gateway_ip = {{ external_gateway_ip | 192.168.1.1 }}
+# (StrOpt) Transient network CIDR. This is an optional field. If not specified 172.10.0.0/16 will be used in stread.
+# transient_cidr = 172.10.0.0/16
+# (StrOpt) Service network CIDR. This is an optional field. If not specified 10.96.0.0/12 will be used instead.
+# service_cidr = 10.96.0.0/12
+# (StrOpt) Network Maximum Transmission Unit (MTU). This is a mandatory field.
+mtu = {{ mtu | 1400 }}

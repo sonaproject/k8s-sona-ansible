@@ -1,0 +1,7 @@
+---
+
+- include_tasks: el_prep.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: el_install.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

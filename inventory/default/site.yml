@@ -5,6 +5,7 @@
   roles:
     - { role: docker, tags: docker }
     - { role: ovs, tags: ovs }
+    - { role: cni, tags: cni }
 
 - hosts: master
   gather_facts: yes
