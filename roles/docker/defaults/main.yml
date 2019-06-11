@@ -1,5 +1,8 @@
 ---
 
-docker_version: 17.05
 systemd_dir: /lib/systemd/system
 system_env_dir: /etc/sysconfig
+docker_dep_pkgs: 
+  - "yum-utils"
+  - "device-mapper-persistent-data"
+  - "lvm2"

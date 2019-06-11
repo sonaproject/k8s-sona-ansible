@@ -12,3 +12,9 @@
   become: yes
   roles:
     - { role: kubernetes/master, tags: master }
+
+- hosts: worker
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: kubernetes/worker, tags: worker }

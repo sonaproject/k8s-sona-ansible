@@ -1,5 +1,11 @@
 ---
   - block:
+    - name: Install Docker dependencies
+      yum:
+        name: "{{ docker_dep_pkgs }}"
+        state: installed
+      become: true
+
     - name: Add Docker yum repository
       shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
