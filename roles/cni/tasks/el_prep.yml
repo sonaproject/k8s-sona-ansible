@@ -17,6 +17,11 @@
         name: git
         state: installed
 
+    - name: Install net-tools
+      yum:
+        name: net-tools
+        state: installed
+
     - name: Clone SONA-CNI
       git:
         repo: "{{ sona_cni_repo }}"
