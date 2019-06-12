@@ -12,6 +12,13 @@
   become: yes
   roles:
     - { role: kubernetes/master, tags: master }
+  tasks:
+    - name: "Helm role"
+      include_role:
+        name: helm
+      when: "additional_features.helm"
+      run_once: yes
+      tags: helm
 
 - hosts: worker
   gather_facts: yes
