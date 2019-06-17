@@ -33,22 +33,24 @@ data:
     #!/bin/bash
     set -e
     host=$(hostname -s)
-    config=$(curl -s http://$host:8181/onos/v1/cluster/$host --user onos:rocks)
+    config=$(curl -s http://$host:8181/onos/v1/cluster/127.0.0.1 --user onos:rocks)
     echo $config
     printf '%q' $config | grep -q "READY"
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: onos
   namespace: kube-system
   labels:
     k8s-app: onos
 spec:
+  serviceName: onos
+  selector:
+    matchLabels:
+      k8s-app: onos
   replicas: 1
-  strategy:
-    type: Recreate
   template:
     metadata:
       name: onos
@@ -81,7 +83,7 @@ spec:
       containers:
       - name: onos
         image: opensona/onos-sona-nightly-docker:k8s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: JAVA_OPTS
           value: -Xmx2G

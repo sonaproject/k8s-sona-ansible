@@ -44,18 +44,21 @@ data:
       }
     }
 
-------
-apiVersion: extensions/v1beta1
-kind: Deployment
+---
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: atomix
   namespace: kube-system
   labels:
     k8s-app: atomix
 spec:
+  serviceName: atomix
+  selector:
+    matchLabels:
+      k8s-app: atomix
   replicas: 1
-  strategy:
-    type: Recreate
+  podManagementPolicy: Parallel
   template:
     metadata:
       name: atomix
