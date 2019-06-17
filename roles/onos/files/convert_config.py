@@ -9,12 +9,12 @@ def main(argv):
    try:
       opts, args = getopt.getopt(argv,"ht:i:o:",["token","ifile=","ofile="])
    except getopt.GetoptError:
-      print 'test.py -t <token> -i <inputfile> -o <outputfile>'
+      print 'convert_config.py -t <token> -i <inputfile> -o <outputfile>'
       sys.exit(2)
 
    for opt, arg in opts:
       if opt == '-h':
-         print 'test.py -t <token> -i <inputfile> -o <outputfile>'
+         print 'convert_config.py -t <token> -i <inputfile> -o <outputfile>'
          sys.exit()
       elif opt in ("-i", "--ifile"):
          inputfile = arg
@@ -42,7 +42,7 @@ def main(argv):
          api_configs = {
             "scheme": scheme,
             "ipAddress": ip_address,
-            "port": port,
+            "port": int(port),
             "token": token,
             "caCertData": ca_cert_data,
             "clientCertData": client_cert_data,
