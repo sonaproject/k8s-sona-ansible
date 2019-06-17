@@ -32,8 +32,7 @@ data:
   check-onos-status: |
     #!/bin/bash
     set -e
-    host=$(hostname -s)
-    config=$(curl -s http://$host:8181/onos/v1/cluster/127.0.0.1 --user onos:rocks)
+    config=$(curl -s http://localhost:8181/onos/v1/cluster/127.0.0.1 --user onos:rocks)
     echo $config
     printf '%q' $config | grep -q "READY"
 
