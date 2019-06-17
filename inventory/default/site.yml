@@ -12,6 +12,8 @@
   become: yes
   roles:
     - { role: kubernetes/master, tags: master }
+    - { role: atomix, tags: atomix }
+    - { role: onos, tags: onos }
   tasks:
     - name: "Helm role"
       include_role:

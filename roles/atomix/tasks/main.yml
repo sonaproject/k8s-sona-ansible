@@ -1,0 +1,21 @@
+---
+- name: "Create tmp directory"
+  file:
+    path: "{{ tmp_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Copy atomix yaml"
+  copy:
+    src: "atomix.yml"
+    dest: "{{ tmp_dir }}/atomix.yml"
+    mode: 0644
+
+- name: "Install atomix POD on kube-system namespace"
+  shell: "kubectl apply -f {{ tmp_dir }}/atomix.yml"
+
+- name: "Clean-up"
+  file:
+    path: "{{ tmp_dir }}"
+    state: absent
+  ignore_errors: yes
