@@ -1,0 +1,132 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: onos-config
+  namespace: kube-system
+data:
+  cluster.json: |-
+    {
+      "node": {
+          "ip": "127.0.0.1",
+          "id": "127.0.0.1",
+          "port": 9876
+      },
+      "storage": [
+          {
+              "ip": "127.0.0.1",
+              "id": "atomix-1",
+              "port": 5679
+          }
+      ],
+      "name": "onos"
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onos-probe-scripts
+  namespace: kube-system
+data:
+  check-onos-status: |
+    #!/bin/bash
+    set -e
+    host=$(hostname -s)
+    config=$(curl -s http://$host:8181/onos/v1/cluster/$host --user onos:rocks)
+    echo $config
+    printf '%q' $config | grep -q "READY"
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: onos
+  namespace: kube-system
+  labels:
+    k8s-app: onos
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: onos
+      namespace: kube-system
+      labels:
+        k8s-app: onos
+    spec:
+      hostNetwork: true
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+      # These containers are run during pod initialization
+      initContainers:
+      - name: onos-init
+        image: busybox
+        command: ["/bin/sh", "-c", "echo $CLUSTER_JSON > /tmp/cluster.json; cat /tmp/cluster.json"]
+        env:
+          - name: CLUSTER_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: onos-config
+                key: cluster.json
+        volumeMounts:
+          - name: config
+            mountPath: /tmp
+            readOnly: false
+      containers:
+      - name: onos
+        image: opensona/onos-sona-nightly-docker:k8s
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx2G
+        ports:
+        - name: openflow
+          containerPort: 6653
+        - name: ovsdb
+          containerPort: 6640
+        - name: east-west
+          containerPort: 9876
+        - name: cli
+          containerPort: 8101
+        - name: ui
+          containerPort: 8181
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /root/onos/bin/check-onos-status
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          failureThreshold: 10
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /root/onos/bin/check-onos-status
+          initialDelaySeconds: 300
+          periodSeconds: 15
+          timeoutSeconds: 5
+        volumeMounts:
+          - name: probe-scripts
+            mountPath: /root/onos/bin/check-onos-status
+            subPath: check-onos-status
+          - name: config
+            mountPath: /root/onos/config
+            readOnly: true
+      volumes:
+      - name: probe-scripts
+        configMap:
+          name: onos-probe-scripts
+          defaultMode: 0744
+      - name: config
+        hostPath:
+          path: /tmp/onos-config
+          type: DirectoryOrCreate
