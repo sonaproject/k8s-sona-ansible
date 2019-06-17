@@ -21,6 +21,12 @@ data:
       ],
       "name": "onos"
     }
+  component-cfg.json: |-
+    {
+      "org.onosproject.k8snode.impl.DefaultK8sNodeHandler": {
+        "ovsdbPortNum": 6650
+      }
+    }
 
 ---
 apiVersion: v1
@@ -68,13 +74,18 @@ spec:
       initContainers:
       - name: onos-init
         image: busybox
-        command: ["/bin/sh", "-c", "echo $CLUSTER_JSON > /tmp/cluster.json; cat /tmp/cluster.json"]
+        command: ["/bin/sh", "-c", "echo $CLUSTER_JSON > /tmp/cluster.json; cat /tmp/cluster.json; echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json; cat /tmp/component-cfg.json"]
         env:
           - name: CLUSTER_JSON
             valueFrom:
               configMapKeyRef:
                 name: onos-config
                 key: cluster.json
+          - name: COMPONENT_CONFIG_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: onos-config
+                key: component-cfg.json
         volumeMounts:
           - name: config
             mountPath: /tmp
