@@ -144,7 +144,12 @@ spec:
       initContainers:
       - name: onos-init
         image: busybox
-        command: ["/bin/sh", "-c", "echo $CLUSTER_JSON > /tmp/cluster.json; cat /tmp/cluster.json; echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json; cat /tmp/component-cfg.json"]
+        command: ["/bin/sh", "-c"] 
+        args:
+          - echo $CLUSTER_JSON > /tmp/cluster.json;
+            cat /tmp/cluster.json;
+            echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json;
+            cat /tmp/component-cfg.json
         env:
           - name: CLUSTER_JSON
             valueFrom:
@@ -240,11 +245,17 @@ spec:
       initContainers:
       - name: onos-liveness-probe
         image: busybox
-        command: ["/bin/sh", "-c", "sleep 10"]
+        command: ["/bin/sh", "-c"]
+        args:
+          - sleep 60
       containers:
       - name: onos-config
         image: opensona/python-docker
-        command: ["python", "/root/onos/bin/convert-kube-config.py", "-i", "/root/onos/kube_admin.conf", "-o", "/tmp/onos_config.json", "-t", "test"]
+        command: ["/bin/sh", "-c"]
+        args:
+          - python /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t test ;
+            curl --user onos:rocks -X POST http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
+            while true ; do sleep 10 ; done
         volumeMounts:
           - name: config-scripts
             mountPath: /root/onos/bin/convert-kube-config.py

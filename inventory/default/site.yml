@@ -5,15 +5,12 @@
   roles:
     - { role: docker, tags: docker }
     - { role: ovs, tags: ovs }
-    - { role: cni, tags: cni }
 
 - hosts: master
   gather_facts: yes
   become: yes
   roles:
     - { role: kubernetes/master, tags: master }
-    - { role: atomix, tags: atomix }
-    - { role: onos, tags: onos }
   tasks:
     - name: "Helm role"
       include_role:
@@ -27,3 +24,16 @@
   become: yes
   roles:
     - { role: kubernetes/worker, tags: worker }
+
+- hosts: cluster
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: cni, tags: cni }
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: atomix, tags: atomix }
+    - { role: onos, tags: onos }
