@@ -101,7 +101,9 @@ data:
                 "clientKeyData": client_key_data
              }
              data = {
-                "apiConfigs": api_configs
+                "apiConfigs": [
+                   api_configs
+                ]
              }
           except yaml.YAMLError as exc:
              print(exc)
@@ -251,10 +253,11 @@ spec:
       containers:
       - name: onos-config
         image: opensona/python-docker
+        imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
         args:
-          - python /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t test ;
-            curl --user onos:rocks -X POST http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
+          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t b0f7b8.8d1767876297d85c ;
+            curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
             while true ; do sleep 10 ; done
         volumeMounts:
           - name: config-scripts
