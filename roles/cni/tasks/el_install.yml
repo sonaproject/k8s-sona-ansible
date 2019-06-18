@@ -14,4 +14,9 @@
     - name: Configure SONA-CNI as default Kubernetes CNI
       template: src=1-sona-net.conf.j2 dest=/etc/cni/net.d/1-sona-net.conf
 
+    - name: Configure external bridge and IP
+      shell: python config-external.py
+      args:
+        chdir: "{{ sona_cni_tmp_dir }}"
+
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

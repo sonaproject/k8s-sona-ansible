@@ -22,8 +22,8 @@ network: sona
 # Network parameters
 overlay_type: "VXLAN"
 segment_id: 100
-external_interface: "eth1"
-external_gateway_ip: "192.168.1.1"
+external_interface: "enp0s9"
+external_gateway_ip: "192.168.57.1"
 mtu: 1400
 
 # Change this to an appropriate interface, preferably a private network.
