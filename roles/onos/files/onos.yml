@@ -151,7 +151,8 @@ spec:
           - echo $CLUSTER_JSON > /tmp/cluster.json;
             cat /tmp/cluster.json;
             echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json;
-            cat /tmp/component-cfg.json
+            cat /tmp/component-cfg.json;
+            rm -rf /tmp/ready
         env:
           - name: CLUSTER_JSON
             valueFrom:
@@ -258,6 +259,7 @@ spec:
         args:
           - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t b0f7b8.8d1767876297d85c ;
             curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
+            touch /tmp/ready ;
             while true ; do sleep 10 ; done
         volumeMounts:
           - name: config-scripts

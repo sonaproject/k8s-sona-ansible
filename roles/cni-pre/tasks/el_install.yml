@@ -18,5 +18,6 @@
       shell: python config-external.py
       args:
         chdir: "{{ sona_cni_tmp_dir }}"
+      ignore_errors: yes
 
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

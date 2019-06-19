@@ -21,6 +21,12 @@
     enabled: yes
   register: started_kubelet
 
+- name: Restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+  become: true 
+
 - name: "Copy config file"
   fetch:
     src: /etc/kubernetes/admin.conf 

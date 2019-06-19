@@ -49,5 +49,8 @@ additional_features:
 # temporary directory used by additional features
 tmp_dir: /tmp/kubeadm-ansible-files
 
+# temporary directory used by ONOS-CONFIG
+onos_config_tmp_dir: /tmp/onos-config
+
 # temporary directory used by SONA-CNI
 sona_cni_tmp_dir: /tmp/sona-cni
