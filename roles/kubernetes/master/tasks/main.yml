@@ -10,6 +10,9 @@
   when: not kubeadm_ca.stat.exists
   run_once: yes
 
+- name: Apply KUBELET_EXTRA_ARGS
+  template: src=kubelet.j2 dest=/etc/sysconfig/kubelet
+
 - name: Enable and check kubelet service
   systemd:
     name: kubelet
