@@ -23,7 +23,7 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
 ## Installation
 1. Install ansible at all nodes.
 ```
-# yum install ansible git -y
+# yum install ansible -y
 ```
 
 2. Generate RSA key at master node. Make sure do not create any passphrase.
@@ -35,7 +35,7 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
 ```
 # hostnamectl set-hostname $node-name
 ```
-Add configured hostname and IP address pair to /etc/hosts at master node.
+(Optional) Add configured hostname and IP address pair to /etc/hosts at master node.
 Followings are the example configuration.
 ```
 master  192.168.56.101
@@ -47,8 +47,9 @@ worker  192.168.56.201
 # ssh-copy-id root@$node-name
 ```
 
-4. Clone k8s-sona-ansible script at master node.
+4. Install ```git``` and clone ```k8s-sona-ansible``` script at master node.
 ```
+# yum install git -y
 # git clone https://github.com/sonaproject/k8s-sona-ansible.git
 ```
 
