@@ -4,6 +4,10 @@
       wait_for:
         path: "{{ onos_config_tmp_dir }}/ready"
 
+    - name: Wait for ONOS push configuration
+      pause:
+        seconds: 10
+
     - name: Configure route
       shell: python config-route.py
       args:
