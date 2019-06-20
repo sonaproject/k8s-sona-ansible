@@ -5,7 +5,7 @@
         name: '*'
         state: latest
         update_cache: yes
-        exclude: kernel*
+        exclude: kernel*, kube*
       become: true
 
     - name: Put SELinux in permissive mode

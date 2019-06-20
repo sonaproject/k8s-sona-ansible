@@ -46,6 +46,28 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: sona-probe-scripts
+  namespace: kube-system
+data:
+  check-sona-status: |
+    #!/bin/bash
+    set -e
+    
+    while true
+    do
+      check_str='curl -sL --user onos:rocks -w "%{http_code}\\n" "http://localhost:8181/onos/k8snetworking/network/exist/1" -o /dev/null'
+      if [ $(eval $check_str) == "200" ];
+      then
+        break
+      else
+        sleep 5s
+      fi
+    done
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: kube-config-scripts
   namespace: kube-system
 data:
@@ -246,11 +268,16 @@ spec:
         node-role.kubernetes.io/master: ""
 
       initContainers:
-      - name: onos-liveness-probe
-        image: busybox
+      - name: sona-readiness-probe
+        image: opensona/python-docker
         command: ["/bin/sh", "-c"]
         args:
-          - sleep 60
+          - /tmp/check-sona-status ;
+            sleep 30
+        volumeMounts:
+          - name: probe-scripts
+            mountPath: /tmp/check-sona-status
+            subPath: check-sona-status
       containers:
       - name: onos-config
         image: opensona/python-docker
@@ -259,6 +286,9 @@ spec:
         args:
           - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t b0f7b8.8d1767876297d85c ;
             curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
+            sleep 5 ;
+            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
+            sleep 5 ;
             touch /tmp/ready ;
             while true ; do sleep 10 ; done
         volumeMounts:
@@ -275,6 +305,10 @@ spec:
         - name: config-scripts
           configMap:
             name: kube-config-scripts
+            defaultMode: 0744
+        - name: probe-scripts
+          configMap:
+            name: sona-probe-scripts
             defaultMode: 0744
         - name: config
           hostPath:
