@@ -5,8 +5,8 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
 - OS: CentOS 7.6
 - Kernel: 3.10.0-957
 - Network:
-  - Primary: management, tunneling
-  - Secondary: NodeIP, routing
+  - Primary (internal): management, tunneling
+  - Secondary (external): NodeIP, routing
 - Nodes: 
   - 1 master node
   - 1 worker node (multi-worker nodes case will be supported later)
@@ -66,7 +66,7 @@ worker
 ```
 
 6. Configure network related parameters via all.yml which is located under ```inventory/default/group_vars/```.
-Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip``` name.
+Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip```. Typically we use secondary network as the external network.
 
 7. Run ansible script at master node.
 ```
