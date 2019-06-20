@@ -9,9 +9,18 @@
   include_tasks: join.yml
   when: not kubelet_conf.stat.exists
 
+- name: Apply KUBELET_EXTRA_ARGS
+  template: src=kubelet.j2 dest=/etc/sysconfig/kubelet
+
 - name: Enable and check kubelet service
   systemd:
     name: kubelet
     daemon_reload: yes
     state: started
     enabled: yes
+
+- name: Restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+  become: true

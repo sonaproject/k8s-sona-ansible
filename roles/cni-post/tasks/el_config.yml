@@ -1,18 +1,9 @@
 ---
   - block:
-    - name: Wait for ONOS being in READY state
-      wait_for:
-        path: "{{ onos_config_tmp_dir }}/ready"
-
     - name: Configure route
       shell: python config-route.py
       args:
         chdir: "{{ sona_cni_tmp_dir }}"
       ignore_errors: yes
-
-    - name: Clean ONOS READY state
-      file:
-        state: absent
-        path: "{{ onos_config_tmp_dir }}/ready"
 
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

@@ -14,6 +14,11 @@
   notify:
     - Recreate kube-dns
 
+- name: Create Kubernetes config directory
+  file:
+    path: ".kube/"
+    state: directory
+
 - name: Copy admin.conf to Home directory
   when: join_cluster is succeeded
   copy:
@@ -22,4 +27,4 @@
     owner: "{{ ansible_user | default(ansible_user_id) }}"
     group: "{{ ansible_user | default(ansible_user_id) }}"
     mode: 0755
-    remote_src: true
+    remote_src: false

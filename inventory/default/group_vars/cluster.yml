@@ -1,3 +1,4 @@
 ---
 
 master_ip: "{{ groups['master'][0] | default(hostvars[groups['master'][0]]['ansible_default_ipv4'].address) }}"
+worker_ip: "{{ groups['worker'][0] | default(hostvars[groups['worker'][0]]['ansible_default_ipv4'].address) }}"

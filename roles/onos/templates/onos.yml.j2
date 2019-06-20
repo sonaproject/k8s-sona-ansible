@@ -8,8 +8,8 @@ data:
   cluster.json: |-
     {
       "node": {
-          "ip": "127.0.0.1",
-          "id": "127.0.0.1",
+          "ip": "{{ master_ip }}",
+          "id": "{{ master_ip }}",
           "port": 9876
       },
       "storage": [
@@ -38,7 +38,7 @@ data:
   check-onos-status: |
     #!/bin/bash
     set -e
-    config=$(curl -s http://localhost:8181/onos/v1/cluster/127.0.0.1 --user onos:rocks)
+    config=$(curl -s http://localhost:8181/onos/v1/cluster/{{ master_ip }} --user onos:rocks)
     echo $config
     printf '%q' $config | grep -q "READY"
 
@@ -284,11 +284,15 @@ spec:
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
         args:
-          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t b0f7b8.8d1767876297d85c ;
+          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t {{ token }} ;
             curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
             sleep 5 ;
             curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
-            sleep 5 ;
+            sleep 10 ;
+            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/states ;
+            sleep 10 ;
+            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/rules ;
+            sleep 10 ;
             touch /tmp/ready ;
             while true ; do sleep 10 ; done
         volumeMounts:

@@ -6,16 +6,23 @@
     mode: 0755
 
 - name: "Copy ONOS yaml"
-  copy:
-    src: "onos.yml"
-    dest: "{{ tmp_dir }}/onos.yml"
-    mode: 0644
+  template: src=onos.yml.j2 dest={{ tmp_dir }}/onos.yml
 
 - name: "Install ONOS POD on kube-system namespace"
   shell: "kubectl apply -f {{ tmp_dir }}/onos.yml"
 
-- name: "Clean-up"
+- name: "Clean-up ONOS temporary directory"
   file:
     path: "{{ tmp_dir }}"
     state: absent
   ignore_errors: yes
+
+- name: "Wait for ONOS being in READY state"
+  wait_for:
+    path: "{{ onos_config_tmp_dir }}/ready"
+
+- name: "Clean ONOS READY state"
+  file:
+    state: absent
+    path: "{{ onos_config_tmp_dir }}/ready"
+
