@@ -13,3 +13,13 @@
   register: join_cluster
   notify:
     - Recreate kube-dns
+
+- name: Copy admin.conf to Home directory
+  when: join_cluster is succeeded
+  copy:
+    src: "{{ kubeadmin_config }}"
+    dest: ".kube/config"
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+    group: "{{ ansible_user | default(ansible_user_id) }}"
+    mode: 0755
+    remote_src: true
