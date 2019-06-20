@@ -3,8 +3,22 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
 
 ## Requirements
 - OS: CentOS 7.6
-- Network: Two network interfaces
-- Nodes: 1 master node, 1 worker nodes (multi-worker node case will be supported later)
+- Kernel: 3.10.0-957
+- Network:
+  - Primary: management, tunneling
+  - Secondary: NodeIP, routing
+- Nodes: 
+  - 1 master node
+  - 1 worker node (multi-worker nodes case will be supported later)
+
+## Components to be installed
+- Mandatory
+  - Kubernetes
+  - ONOS with SONA-CNI
+  - OpenvSwitch
+  - Docker
+- Optional
+  - Helm
 
 ## Installation
 1. Install ansible at all nodes.
@@ -25,7 +39,7 @@ Add configured hostname and IP address pair to /etc/hosts at master node.
 Followings are the example configuration.
 ```
 master  192.168.56.101
-worker1 192.168.56.201
+worker  192.168.56.201
 ```
 
 3. Copy distribute RSA public key to all nodes (master + worker).
