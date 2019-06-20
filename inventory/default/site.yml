@@ -29,17 +29,23 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: cni-pre, tags: cni }
+    - { role: cni/pre, tags: cni }
 
 - hosts: master
   gather_facts: yes
   become: yes
   roles:
     - { role: atomix, tags: atomix }
-    - { role: onos, tags: onos }
+    - { role: onos/main, tags: onos }
 
 - hosts: cluster
   gather_facts: yes
   become: yes
   roles:
-    - { role: cni-post, tags: cni }
+    - { role: cni/post, tags: cni }
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: onos/sync, tags: onos }

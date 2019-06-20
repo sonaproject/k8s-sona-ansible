@@ -1,0 +1,7 @@
+---
+
+- name: "Sync state with Kubernetes API server from ONOS"
+  shell: "curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/states"
+
+- name: "Sync rules from ONOS"
+  shell: "curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/rules"
