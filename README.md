@@ -17,9 +17,22 @@ Requirements
 # ssh-keygen -t rsa
 ```
 
-3. Copy distribute RSA public key to all worker nodes.
+3. Configure the hostname of each node. Run following command at each node to configure the hostname.
 ```
-# ssh-copy-id root@worker1~n
+# hostnamectl set-hostname $node-name
+```
+Add configured hostname and IP address pair to /etc/hosts at master node.
+Followings are the example configuration.
+```
+master  192.168.56.101
+worker1 192.168.56.201
+worker2 192.168.56.202
+...
+```
+
+3. Copy distribute RSA public key to all nodes (master + worker).
+```
+# ssh-copy-id root@$node-name
 ```
 
 4. Clone k8s-sona-ansible script at master node.
@@ -33,7 +46,7 @@ Requirements
 192.168.56.101
 
 [worker]
-192.168.56.102
+192.168.56.201
 
 [cluster:children]
 master
