@@ -1,12 +1,12 @@
 # k8s-sona-ansible
 An automated installation script used for installing Kubernetes, Docker, OVS, ONOS, SONA-CNI and Helm.
 
-## Installation
-Requirements
+## Requirements
 - OS: CentOS 7.6
 - Network: Two network interfaces
 - Nodes: 1 master node, n worker nodes
 
+## Installation
 1. Install ansible at all nodes.
 ```
 # yum install ansible git -y
