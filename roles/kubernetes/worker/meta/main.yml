@@ -18,4 +18,4 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-  - { role: kubernetes/node, kube_pkgs: ["kubelet-{{ kube_version }}", "kubeadm-{{ kube_version }}"] }
+  - { role: kubernetes/node, kube_pkgs: ["kubelet-{{ kube_version }}", "kubeadm-{{ kube_version }}", "kubectl-{{ kube_version }}"] }
