@@ -52,7 +52,7 @@ worker  192.168.56.201
 # git clone https://github.com/sonaproject/k8s-sona-ansible.git
 ```
 
-5. Add hosts.ini by referring to the example config from ```inventory/default/hosts.ini.example```.
+5. Add ```hosts.ini``` by referring to the example config from ```inventory/default/hosts.ini.example```.
 ```
 [master]
 192.168.56.101
