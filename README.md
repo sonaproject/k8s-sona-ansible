@@ -21,9 +21,9 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
   - Helm
 
 ## Installation
-1. Install ansible at all nodes.
+1. Install ansible and git at master node.
 ```
-# yum install ansible -y
+# yum install ansible git -y
 ```
 
 2. Generate RSA key at master node. Make sure do not create any passphrase.
@@ -42,14 +42,13 @@ master  192.168.56.101
 worker  192.168.56.201
 ```
 
-3. Copy distribute RSA public key to all nodes (master + worker).
+3. Copy RSA public key from master node and distribute to all nodes (master + worker).
 ```
 # ssh-copy-id root@$node-name
 ```
 
-4. Install ```git``` and clone ```k8s-sona-ansible``` script at master node.
+4. Clone ```k8s-sona-ansible``` script at master node.
 ```
-# yum install git -y
 # git clone https://github.com/sonaproject/k8s-sona-ansible.git
 ```
 
@@ -66,7 +65,7 @@ master
 worker
 ```
 
-6. Configure network related parameters via all.yml which is located under ```inventory/default/group_vars/```.
+6. Configure network related parameters via ```all.yml``` which is located under ```inventory/default/group_vars/```.
 Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip```. Typically we use secondary network as the external network.
 
 7. Run ansible script at master node.
