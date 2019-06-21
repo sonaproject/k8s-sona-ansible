@@ -9,8 +9,8 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
   - Secondary (external): NodeIP, routing
 - Nodes: 
   - 1 master node
-  - 1 worker node (multi-worker nodes case will be supported later)
-
+  - 0 ~ n worker nodes
+  
 ## Components to be installed
 - Mandatory
   - Kubernetes
