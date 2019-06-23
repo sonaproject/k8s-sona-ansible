@@ -1,5 +1,5 @@
 # k8s-sona-ansible
-An automated installation script used for installing Kubernetes, Docker, OVS, ONOS, SONA-CNI and Helm.
+An automated installation script used for installing Kubernetes, Docker, OpenvSwitch, ONOS, SONA-CNI and Helm.
 
 ## Requirements
 - OS: CentOS 7.6
@@ -13,7 +13,7 @@ An automated installation script used for installing Kubernetes, Docker, OVS, ON
   
 ## Components to be installed
 - Mandatory
-  - Kubernetes
+  - Kubernetes with Dashboard
   - ONOS with SONA-CNI
   - OpenvSwitch
   - Docker
@@ -65,7 +65,7 @@ master
 worker
 ```
 
-6. Configure network related parameters via ```all.yml``` which is located under ```inventory/default/group_vars/```.
+6. Add ```all.yml``` by referring to the example config from ```inventory/default/group_vars/all.yml.example```.
 Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip```. Typically we use secondary network as the external network.
 
 7. Run ansible script at master node.
@@ -74,3 +74,10 @@ Make sure you have configured the correct ```external_interface```, and ```exter
 ```
 
 8. Enjoy!
+
+## Important Pointers
+* For latest updates, visit [project page](https://github.com/sonaproject/sona-cni).
+* For manually installation, visit [installation page](https://wiki.onosproject.org/display/ONOS/SONA-CNI+Installation)
+* Report bugs or new requirement(s) on the [bug page](https://github.com/sonaproject/k8s-sona-ansible/issues).
+* Any contribution is appreciated.
+* Start contributing and enjoy ;)
