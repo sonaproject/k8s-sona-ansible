@@ -140,19 +140,19 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: onos
+  name: sona-onos
   namespace: kube-system
   labels:
     k8s-app: onos
 spec:
-  serviceName: onos
+  serviceName: sona-onos
   selector:
     matchLabels:
       k8s-app: onos
   replicas: 1
   template:
     metadata:
-      name: onos
+      name: sona-onos
       namespace: kube-system
       labels:
         k8s-app: onos
@@ -247,7 +247,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: onos-config
+  name: sona-onos-config
   namespace: kube-system
   labels:
     k8s-app: onos-config
@@ -255,7 +255,7 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: onos-config
+      name: sona-onos-config
       namespace: kube-system
       labels:
         k8s-app: onos-config

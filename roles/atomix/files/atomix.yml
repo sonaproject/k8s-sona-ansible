@@ -48,12 +48,12 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: atomix
+  name: sona-atomix
   namespace: kube-system
   labels:
     k8s-app: atomix
 spec:
-  serviceName: atomix
+  serviceName: sona-atomix
   selector:
     matchLabels:
       k8s-app: atomix
@@ -61,7 +61,7 @@ spec:
   podManagementPolicy: Parallel
   template:
     metadata:
-      name: atomix
+      name: sona-atomix
       namespace: kube-system
       labels:
         k8s-app: atomix
