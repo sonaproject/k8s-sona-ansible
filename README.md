@@ -76,6 +76,13 @@ Make sure you have configured the correct ```external_interface```, and ```exter
 
 8. Enjoy!
 
+## Site Reset
+In case you would like to reset the entire environments, run following ansible script at master node.
+Note that site reset does not uninstall Kubernetes, OpenvSwitch and Docker.
+```
+# ansible-playbook inventory/default/reset-site.yml
+```
+
 ## Important Pointers
 * For latest updates, visit [project page](https://github.com/sonaproject/sona-cni).
 * For manually installation, visit [installation page](https://wiki.onosproject.org/display/ONOS/SONA-CNI+Installation)
