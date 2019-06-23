@@ -19,6 +19,7 @@ An automated installation script used for installing Kubernetes, Docker, OpenvSw
   - Docker
 - Optional
   - Helm
+  - Healthcheck
 
 ## Installation
 1. Install ansible and git at master node.
@@ -66,7 +67,7 @@ worker
 ```
 
 6. Add ```all.yml``` by referring to the example config from ```inventory/default/group_vars/all.yml.example```.
-Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip```. Typically we use secondary network as the external network.
+Make sure you have configured the correct ```external_interface```, and ```external_gateway_ip```. Typically we use secondary network as the external network. It is also possible to install optional packages (e.g., helm, healthcheck) by toggling the flag to ```true``` at ```all.yml```.
 
 7. Run ansible script at master node.
 ```
