@@ -20,6 +20,7 @@
 - name: "Wait for ONOS being in READY state"
   wait_for:
     path: "{{ onos_config_tmp_dir }}/ready"
+    timeout: 600    
 
 - name: "Clean ONOS READY state"
   file:

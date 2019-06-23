@@ -25,10 +25,17 @@
   roles:
     - { role: kubernetes/worker, tags: worker }
 
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: kubernetes/clean/master, tags: clean }
+
 - hosts: cluster
   gather_facts: yes
   become: yes
   roles:
+    - { role: kubernetes/clean/node, tags: clean }
     - { role: cni/pre, tags: cni }
 
 - hosts: master

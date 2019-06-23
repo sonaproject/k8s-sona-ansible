@@ -9,4 +9,10 @@
       register: result
       until: result.rc == 0
 
+    - name: Restart OVS daemon
+      service:
+        name: openvswitch
+        state: restarted
+      become: true  
+
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

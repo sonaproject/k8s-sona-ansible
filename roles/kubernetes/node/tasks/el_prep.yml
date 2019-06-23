@@ -12,4 +12,8 @@
       yum:
         name: firewalld
         state: absent
+    - name: Wipe-up etcd store
+      file:
+        state: absent
+        path: "{{ etcd_dir }}/"
     when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

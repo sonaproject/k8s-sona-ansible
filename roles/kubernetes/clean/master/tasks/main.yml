@@ -1,0 +1,3 @@
+---
+- name: "Remove kube-proxy"
+  shell: "kubectl delete ds kube-proxy -n kube-system"
