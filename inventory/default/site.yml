@@ -18,6 +18,12 @@
       when: "additional_features.helm"
       run_once: yes
       tags: helm
+    - name: "Healthcheck role"
+      include_role:
+        name: healthcheck
+      when: "additional_features.healthcheck"
+      run_once: yes
+      tags: healthcheck
 
 - hosts: worker
   gather_facts: yes
