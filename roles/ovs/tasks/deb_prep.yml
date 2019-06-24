@@ -3,7 +3,7 @@
     - name: Apt-get update
       apt:
         update_cache: yes
-        upgrade: dist
+        upgrade: no
       become: true
       
     when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
