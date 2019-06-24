@@ -2,8 +2,9 @@
 An automated installation script used for installing Kubernetes, Docker, OpenvSwitch, ONOS, SONA-CNI and Helm.
 
 ## Requirements
-- OS: CentOS 7.6
-- Kernel: 3.10.0-957
+- OS
+  - CentOS 7.6 (kernel: 3.10.0-957)
+  - Ubuntu 18.04
 - Network:
   - Primary (internal): management, tunneling
   - Secondary (external): NodeIP, routing
@@ -23,8 +24,13 @@ An automated installation script used for installing Kubernetes, Docker, OpenvSw
 
 ## Installation
 1. Install ansible and git at master node.
+CentOS:
 ```
 # yum install ansible git -y
+```
+Ubuntu:
+```
+# apt-get update && apt-get install ansible git -y
 ```
 
 2. Generate RSA key at master node. Make sure do not create any passphrase.
