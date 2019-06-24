@@ -10,7 +10,7 @@
   when: not kubelet_conf.stat.exists
 
 - name: Apply KUBELET_EXTRA_ARGS
-  template: src=kubelet.j2 dest=/etc/sysconfig/kubelet
+  template: src=kubelet.j2 dest={{ kubelet_env_dir }}
 
 - name: Enable and check kubelet service
   systemd:

@@ -1,0 +1,50 @@
+---
+  - block:
+    - name: "Install openvswitch (Debian/Ubuntu)"
+      apt:
+        name: "openvswitch-switch"
+        state: present
+        update_cache: yes
+
+    - name: "Open OVSDB port"
+      command: sed -i '/set ovsdb-server \"$DB_FILE\"/a \        set \"$@\" --remote=ptcp:6650' /usr/share/openvswitch/scripts/ovs-ctl
+      become: true
+
+    - name: "Start and enable OVS daemon"
+      service:
+        name: "openvswitch-switch"
+        state: started
+        enabled: yes
+      become: true
+
+    - name: "Restart OVS daemon"
+      service:
+        name: "openvswitch-switch"
+        state: restarted
+      become: true
+
+    - name: "Probe OVS module"
+      modprobe:
+        name: "openvswitch"
+        state: present
+      become: true
+
+    - name: "Probe VXLAN module"
+      modprobe:
+        name: "vxlan"
+        state: present
+      become: true
+
+    - name: "Probe GRE module"
+      modprobe:
+        name: "gre"
+        state: present
+      become: true
+
+    - name: "Probe GENEVE module"
+      modprobe:
+        name: "geneve"
+        state: present
+      become: true
+
+    when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

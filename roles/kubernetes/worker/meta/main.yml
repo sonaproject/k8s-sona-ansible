@@ -13,9 +13,10 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - trusty
+        - bionic
 
   galaxy_tags: []
 
 dependencies:
-  - { role: kubernetes/node, kube_pkgs: ["kubelet-{{ kube_version }}", "kubeadm-{{ kube_version }}", "kubectl-{{ kube_version }}"] }
+  - { role: kubernetes/node, kube_pkgs: ["kubelet-{{ kube_version }}", "kubeadm-{{ kube_version }}", "kubectl-{{ kube_version }}"], when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat" }
+  - { role: kubernetes/node, kube_pkgs: ["kubelet={{ kube_version }}-00", "kubeadm={{ kube_version }}-00", "kubectl={{ kube_version }}-00"], when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu" }

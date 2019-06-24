@@ -1,8 +1,9 @@
 ---
   - block:
-    - name: Install kubernetes packages (Debian/Ubuntu)
+    - name: Apt-get update
       apt:
-        name: "{{ kube_pkgs }}"
         update_cache: yes
-        state: installed
+        upgrade: dist
+      become: true
+      
     when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

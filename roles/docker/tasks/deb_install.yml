@@ -3,7 +3,7 @@
     - name: Install docker engine (Debian/Ubuntu)
       apt:
         update_cache: yes
-        name: "docker-ce={{ docker_version }}*"
+        name: "docker-ce"
         state: present
 
     - name: Hold docker version

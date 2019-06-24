@@ -1,5 +1,4 @@
 ---
-
 systemd_dir: /lib/systemd/system
 system_env_dir: /etc/sysconfig
 docker_dep_pkgs: 

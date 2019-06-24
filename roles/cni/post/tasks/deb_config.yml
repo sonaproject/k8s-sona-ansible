@@ -1,0 +1,18 @@
+---
+  - block:
+    - name: Configure route
+      shell: python config-route.py
+      args:
+        chdir: "{{ sona_cni_tmp_dir }}"
+      retries: 5
+      delay: 3
+      register: result
+      until: result.rc == 0
+
+    - name: Restart OVS daemon
+      service:
+        name: openvswitch-switch
+        state: restarted
+      become: true  
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

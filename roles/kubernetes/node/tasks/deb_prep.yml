@@ -10,4 +10,9 @@
         repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
         state: present
         filename: 'kubernetes'
+
+    - name: Wipe-out etcd store
+      file:
+        state: absent
+        path: "{{ etcd_dir }}/"
     when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

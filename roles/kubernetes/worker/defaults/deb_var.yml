@@ -1,0 +1,3 @@
+---
+
+kubelet_env_dir: /etc/default/kubelet

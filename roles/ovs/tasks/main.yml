@@ -13,3 +13,9 @@
 
 - include_tasks: el_install.yml
   when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: deb_prep.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+
+- include_tasks: deb_install.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

@@ -13,7 +13,7 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - trusty
+        - bionic
 
   galaxy_tags: []
 

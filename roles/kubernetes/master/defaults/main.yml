@@ -1,0 +1,4 @@
+---
+
+kubelet_env_dir: "{% if ansible_os_family == 'CentOS' or ansible_os_family == 'RedHat' %}/etc/sysconfig/kubelet{% elif ansible_os_family == 'Debian' or ansible_os_family == 'Ubuntu' %}/etc/default/kubelet{% endif %}"
+
