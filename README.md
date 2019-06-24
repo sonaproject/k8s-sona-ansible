@@ -24,13 +24,14 @@ An automated installation script used for installing Kubernetes, Docker, OpenvSw
 
 ## Installation
 1. Install ansible and git at master node.
+
 CentOS:
 ```
 # yum install ansible git -y
 ```
 Ubuntu:
 ```
-# apt-get update && apt-get install ansible git -y
+# apt-get install ansible git -y
 ```
 
 2. Generate RSA key at master node. Make sure do not create any passphrase.
