@@ -2,9 +2,9 @@
 An automated installation script used for installing Kubernetes, Docker, OpenvSwitch, ONOS, SONA-CNI and Helm.
 
 ## Requirements
-- OS
+- Operating System
   - CentOS 7.6 (kernel: 3.10.0-957)
-  - Ubuntu 18.04
+  - Ubuntu 16.04, 18.04 (LTS)
 - Network:
   - Primary (internal): management, tunneling
   - Secondary (external): NodeIP, routing
@@ -30,6 +30,14 @@ CentOS:
 # yum install ansible git -y
 ```
 Ubuntu:
+
+16.04:
+
+If you are running Ubuntu 16.04, the pre-installed ansible does not support multi-tasks, and this in turn causes runtime failure. To resolve this issue, the users need to following [this guide](https://github.com/sonaproject/k8s-sona-ansible/wiki/Guides-of-upgrading-ansible-package-on-Ubuntu-16.04) to upgrade ansible to higher version.
+
+18.04 or higher:
+
+If you are running Ubuntu 18.04 or higher version, no need to manually upgrade ansible.
 ```
 # apt-get install ansible git -y
 ```
