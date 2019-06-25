@@ -2,7 +2,7 @@
 - name: Download openvswitch packages
   get_url:
     url: "{{ovs_deb_repo_path}}/{{item}}"
-    dest: "{{el_tmp}}"
+    dest: "{{deb_tmp}}"
   with_items:
     - "{{ovs_deb_package}}"
     - "{{ovs_common_deb_package}}"
