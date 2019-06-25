@@ -1,18 +1,38 @@
 ---
-rl_os_version: 7
-ul_os_version: 18.04
+el_os_version: 7
+deb_os_version: 16.04
 ovs_version: 2.10.2
 kernel_version: 3.10.0-957
 ovs_repo_prefix: "https://github.com/sonaproject/openvswitch-distro/raw/master"
-ovs_rl_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{rl_os_version}}/{{ovs_version}}"
-ovs_ul_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{ul_os_version}}/{{ovs_version}}"
-ovs_package: "openvswitch-{{ovs_version}}-1.x86_64.rpm"
-ovs_devel_package: "openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
-ovs_selinux_package: "openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
-ovs_kmod_package: "openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
+ovs_el_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{el_os_version}}/{{ovs_version}}"
+ovs_deb_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{deb_os_version}}/{{ovs_version}}"
+ovs_rpm_package: "openvswitch-{{ovs_version}}-1.x86_64.rpm"
+ovs_devel_rpm_package: "openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
+ovs_selinux_rpm_package: "openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
+ovs_kmod_rpm_package: "openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
 el_tmp: "/tmp"
 el_ovs_packages:
-    - "{{el_tmp}}/{{ovs_package}}"
-    - "{{el_tmp}}/{{ovs_devel_package}}"
-    - "{{el_tmp}}/{{ovs_selinux_package}}"
-    - "{{el_tmp}}/{{ovs_kmod_package}}"
+    - "{{el_tmp}}/{{ovs_rpm_package}}"
+    - "{{el_tmp}}/{{ovs_devel_rpm_package}}"
+    - "{{el_tmp}}/{{ovs_selinux_rpm_package}}"
+    - "{{el_tmp}}/{{ovs_kmod_rpm_package}}"
+ovs_deb_package: "openvswitch-switch_{{ovs_version}}-1_amd64.deb"
+ovs_common_deb_package: "openvswitch-common_{{ovs_version}}-1_amd64.deb"
+ovs_dp_dkms_deb_package: "openvswitch-datapath-dkms_{{ovs_version}}-1_all.deb"
+ovs_dp_src_deb_package: "openvswitch-datapath-source_{{ovs_version}}-1_all.deb"
+ovs_pki_deb_package: "openvswitch-pki_{{ovs_version}}-1_all.deb"
+ovs_vtep_deb_package: "openvswitch-vtep_{{ovs_version}}-1_amd64.deb"
+ovs_python_deb_package: "python-openvswitch_{{ovs_version}}-1_all.deb"
+ovs_lib_deb_package: "libopenvswitch_{{ovs_version}}-1_amd64.deb"
+ovs_lib_dev_deb_package: "libopenvswitch-dev_{{ovs_version}}-1_amd64.deb"
+deb_tmp: "/tmp"
+deb_ovs_packages:
+    - "{{deb_tmp}}/{{ovs_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_common_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_dp_dkms_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_dp_src_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_pki_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_vtep_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_python_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_lib_deb_package}}"
+    - "{{deb_tmp}}/{{ovs_lib_dev_deb_package}}"

@@ -17,5 +17,11 @@
 - include_tasks: deb_prep.yml
   when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
 
+- include_tasks: deb_download.yml
+  when: (ansible_os_family == "Debian" or ansible_os_family == "Ubuntu") and ansible_distribution_release == "xenial"
+
+- include_tasks: deb_legacy_install.yml
+  when: (ansible_os_family == "Debian" or ansible_os_family == "Ubuntu") and ansible_distribution_release == "xenial"
+
 - include_tasks: deb_install.yml
-  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+  when: (ansible_os_family == "Debian" or ansible_os_family == "Ubuntu") and ansible_distribution_release != "xenial"

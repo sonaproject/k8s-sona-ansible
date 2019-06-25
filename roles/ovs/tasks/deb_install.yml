@@ -35,12 +35,6 @@
         state: present
       become: true
 
-    - name: "Probe GRE module"
-      modprobe:
-        name: "gre"
-        state: present
-      become: true
-
     - name: "Probe GENEVE module"
       modprobe:
         name: "geneve"

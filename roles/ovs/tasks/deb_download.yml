@@ -1,0 +1,15 @@
+---
+- name: Download openvswitch packages
+  get_url:
+    url: "{{ovs_deb_repo_path}}/{{item}}"
+    dest: "{{el_tmp}}"
+  with_items:
+    - "{{ovs_deb_package}}"
+    - "{{ovs_common_deb_package}}"
+    - "{{ovs_dp_dkms_deb_package}}"
+    - "{{ovs_dp_src_deb_package}}"
+    - "{{ovs_pki_deb_package}}"
+    - "{{ovs_vtep_deb_package}}"
+    - "{{ovs_python_deb_package}}"
+    - "{{ovs_lib_deb_package}}"
+    - "{{ovs_lib_dev_deb_package}}"
