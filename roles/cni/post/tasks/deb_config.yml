@@ -15,4 +15,10 @@
         state: restarted
       become: true  
 
+    - name: Remove SONA-CNI tmp directory
+      file:
+        state: absent
+        path: "{{ sona_cni_tmp_dir }}/"
+      become: true
+
     when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
