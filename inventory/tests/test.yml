@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - { role: ovs }
+    - { role: docker }
+    - { role: kubernetes/master }
