@@ -1,4 +1,4 @@
-![travis_build](https://travis-ci.org/sonaproject/k8s-sona-ansible.svg?branch=master)
+[![travis_build](https://travis-ci.org/sonaproject/k8s-sona-ansible.svg?branch=master)](https://travis-ci.org/sonaproject/k8s-sona-ansible)
 
 # k8s-sona-ansible
 An automated installation script used for installing Kubernetes, Docker, OpenvSwitch, ONOS, SONA-CNI and Helm.
