@@ -106,3 +106,6 @@ Note that site reset does not uninstall Kubernetes, OpenvSwitch and Docker.
 * Report bugs or new requirement(s) on the [bug page](https://github.com/sonaproject/k8s-sona-ansible/issues).
 * Any contribution is appreciated.
 * Start contributing and enjoy ;)
+
+## License
+[Apache 2.0](https://github.com/sonaproject/k8s-sona-ansible/blob/master/LICENSE)
