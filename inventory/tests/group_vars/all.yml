@@ -20,7 +20,7 @@ service_cidr: "10.96.0.0/12"
 pod_network_cidr: "10.10.0.0/16"
 overlay_type: "VXLAN"
 segment_id: 100
-external_interface: "eth0"
+external_interface: "ens3"
 external_gateway_ip: "127.0.0.1"
 mtu: 1400
 
