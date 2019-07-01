@@ -25,7 +25,7 @@ install:
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
   # Install apt.
-  - pip install python-apt
+  - sudo apt-get install -y python-apt 
 
 script:
   # Check the role/playbook's syntax.
