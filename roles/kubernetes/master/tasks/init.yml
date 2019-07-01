@@ -18,14 +18,14 @@
 
 - name: Create Kubernetes config directory
   file:
-    path: ".kube/"
+    path: "{{ ansible_env.HOME }}/.kube/"
     state: directory
 
 - name: Copy admin.conf to Home directory
   when: init_cluster is succeeded
   copy:
     src: "{{ kubeadmin_config }}"
-    dest: ".kube/config"
+    dest: "{{ ansible_env.HOME }}/.kube/config"
     owner: "{{ ansible_user | default(ansible_user_id) }}"
     group: "{{ ansible_user | default(ansible_user_id) }}"
     mode: 0755

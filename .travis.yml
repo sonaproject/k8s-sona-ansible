@@ -32,4 +32,4 @@ script:
   - ansible-playbook inventory/tests/test-syntax.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -e ansible_python_interpreter=/usr/bin/python inventory/tests/test.yml
+  - ansible-playbook -e ansible_python_interpreter=/usr/bin/python -i inventory/tests/hosts.ini inventory/tests/test.yml
