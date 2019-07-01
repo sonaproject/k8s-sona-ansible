@@ -6,3 +6,8 @@
     - { role: ovs }
     - { role: docker }
     - { role: kubernetes/master }
+    - { role: kubernetes/clean/master }
+    - { role: kubernetes/clean/node }
+    - { role: cni/pre }
+    - { role: atomix }
+    - { role: onos/main }
