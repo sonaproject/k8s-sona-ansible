@@ -27,6 +27,8 @@
         ovs-vsctl del-br kbr-int
         ovs-vsctl del-br kbr-ex
         ovs-dpctl del-dp system@ovs-system
+        rmmod vport_vxlan
+        rmmod vport_geneve
         rmmod openvswitch
       ignore_errors: True
     - name: "Remove OpenvSwitch"
