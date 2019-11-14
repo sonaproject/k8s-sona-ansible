@@ -3,13 +3,13 @@
     - name: "Install pip"
       apt:
         name: "python-pip"
-        state: installed
+        state: present
       become: true
 
     - name: "Install git"
       apt:
         name: "git"
-        state: installed
+        state: present
       become: true
 
     - name: "Clone SONA-CNI"
