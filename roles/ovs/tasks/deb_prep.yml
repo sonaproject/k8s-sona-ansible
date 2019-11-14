@@ -1,9 +1,14 @@
 ---
   - block:
+    - name: Add OpenvSwitch apt repo
+      apt_repository:
+        repo: "ppa:gunine/openvswitch-{{ ovs_deb_version }}"
+      become: true
+
     - name: Apt-get update
       apt:
         update_cache: yes
         upgrade: no
       become: true
-      
+
     when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

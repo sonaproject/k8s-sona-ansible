@@ -1,29 +1,11 @@
 ---
   - block:
-    - name: "Install OpenvSwitch (Debian/Ubuntu)"
+    - name: "Install OpenvSwitch with kernel modules (Debian/Ubuntu)"
       apt:
-        name: "openvswitch-switch"
+        name: "{{deb_ovs_packages}}"
         state: present
         update_cache: yes
       become: true
-      when: ansible_distribution_release != "xenial"
-
-    - name: "Install OpenvSwitch with kernel modules (Debian/Ubuntu)"
-      apt:
-        deb: "{{ item }}"
-        state: present
-      with_items:
-        - "{{deb_tmp}}/{{ovs_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_common_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_dp_dkms_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_dp_src_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_pki_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_vtep_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_python_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_lib_deb_package}}"
-        - "{{deb_tmp}}/{{ovs_lib_dev_deb_package}}"
-      become: true
-      when: ansible_distribution_release == "xenial"
 
     - name: "Open OVSDB port"
       command: sed -i '/set ovsdb-server \"$DB_FILE\"/a \        set \"$@\" --remote=ptcp:6650' /usr/share/openvswitch/scripts/ovs-ctl

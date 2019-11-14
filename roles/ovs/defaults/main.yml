@@ -1,12 +1,7 @@
 ---
-el_os_version: 7
-deb_os_version: 16.04
-ovs_version: 2.10.2
+ovs_deb_version: "2.10"
 ovs_el_version: 2-10
-kernel_version: 3.10.0-1062
-ovs_repo_prefix: "https://github.com/sonaproject/openvswitch-distro/raw/master"
-ovs_el_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{el_os_version}}/{{ovs_version}}"
-ovs_deb_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{deb_os_version}}/{{ovs_version}}"
+
 ovs_rpm_package: "openvswitch"
 ovs_devel_rpm_package: "openvswitch-devel"
 ovs_selinux_rpm_package: "openvswitch-selinux-policy"
@@ -17,23 +12,14 @@ el_ovs_packages:
     - "{{ovs_selinux_rpm_package}}"
     - "{{ovs_kmod_rpm_package}}"
 
-ovs_deb_package: "openvswitch-switch_{{ovs_version}}-1_amd64.deb"
-ovs_common_deb_package: "openvswitch-common_{{ovs_version}}-1_amd64.deb"
-ovs_dp_dkms_deb_package: "openvswitch-datapath-dkms_{{ovs_version}}-1_all.deb"
-ovs_dp_src_deb_package: "openvswitch-datapath-source_{{ovs_version}}-1_all.deb"
-ovs_pki_deb_package: "openvswitch-pki_{{ovs_version}}-1_all.deb"
-ovs_vtep_deb_package: "openvswitch-vtep_{{ovs_version}}-1_amd64.deb"
-ovs_python_deb_package: "python-openvswitch_{{ovs_version}}-1_all.deb"
-ovs_lib_deb_package: "libopenvswitch_{{ovs_version}}-1_amd64.deb"
-ovs_lib_dev_deb_package: "libopenvswitch-dev_{{ovs_version}}-1_amd64.deb"
-deb_tmp: "/tmp"
+ovs_deb_package: "openvswitch-switch"
+ovs_common_deb_package: "openvswitch-common"
+ovs_dp_dkms_deb_package: "openvswitch-datapath-dkms"
+ovs_python_deb_package: "python-openvswitch"
+ovs_lib_deb_package: "libopenvswitch"
 deb_ovs_packages:
-    - "{{deb_tmp}}/{{ovs_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_common_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_dp_dkms_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_dp_src_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_pki_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_vtep_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_python_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_lib_deb_package}}"
-    - "{{deb_tmp}}/{{ovs_lib_dev_deb_package}}"
+    - "{{ovs_deb_package}}"
+    - "{{ovs_common_deb_package}}"
+    - "{{ovs_dp_dkms_deb_package}}"
+    - "{{ovs_python_deb_package}}"
+    - "{{ovs_lib_deb_package}}"
