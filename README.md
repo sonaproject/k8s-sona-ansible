@@ -5,7 +5,7 @@ An automated installation script used for installing Kubernetes, Docker, OpenvSw
 
 ## Requirements
 - Operating System
-  - CentOS 7.6 (kernel: 3.10.0-957)
+  - CentOS 7.7 (kernel: 3.10.0-1062)
   - Ubuntu 16.04, 18.04 (LTS)
 - Network:
   - Primary (internal): management, tunneling
