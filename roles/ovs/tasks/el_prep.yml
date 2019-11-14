@@ -1,6 +1,6 @@
 ---
   - block:
-    - name: Yum update
+    - name: "Yum update"
       yum:
         name: '*'
         state: latest
@@ -8,7 +8,10 @@
         exclude: kernel*, kube*
       become: true
 
-    - name: Put SELinux in permissive mode
+    - name: "Add OpenvSwitch yum repository"
+      shell: "curl -s https://packagecloud.io/install/repositories/gunine/openvswitch-{{ ovs_el_version }}/script.rpm.sh | sudo bash"
+
+    - name: "Put SELinux in permissive mode"
       selinux:
         policy: targeted
         state: permissive

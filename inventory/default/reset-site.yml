@@ -7,6 +7,18 @@
     - name: "Reset Kubernetes component"
       shell: "kubeadm reset --force"
       ignore_errors: True
+    - name: "Remove Kubernetes config directory"
+      file:
+        state: absent
+        path: ".kube/config"
+    - name: "Remove kubelet"
+      yum:
+        name: kubelet
+        state: absent
+    - name: "Remove kubeadm"
+      yum:
+        name: kubeadm
+        state: absent
     - name: "Reset external bridge IP"
       shell: "ip addr add $(ip -4 addr show kbr-ex | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')/24 dev {{ external_interface }}"
       ignore_errors: True
@@ -14,4 +26,10 @@
       shell: |
         ovs-vsctl del-br kbr-int
         ovs-vsctl del-br kbr-ex
+        ovs-dpctl del-dp system@ovs-system
+        rmmod openvswitch
       ignore_errors: True
+    - name: "Remove OpenvSwitch"
+      yum:
+        name: openvswitch*
+        state: absent

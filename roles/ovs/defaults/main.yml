@@ -2,20 +2,21 @@
 el_os_version: 7
 deb_os_version: 16.04
 ovs_version: 2.10.2
-kernel_version: 3.10.0-957
+ovs_el_version: 2-10
+kernel_version: 3.10.0-1062
 ovs_repo_prefix: "https://github.com/sonaproject/openvswitch-distro/raw/master"
 ovs_el_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{el_os_version}}/{{ovs_version}}"
 ovs_deb_repo_path: "{{ovs_repo_prefix}}/{{ansible_os_family}}/{{deb_os_version}}/{{ovs_version}}"
-ovs_rpm_package: "openvswitch-{{ovs_version}}-1.x86_64.rpm"
-ovs_devel_rpm_package: "openvswitch-devel-{{ovs_version}}-1.x86_64.rpm"
-ovs_selinux_rpm_package: "openvswitch-selinux-policy-{{ovs_version}}-1.noarch.rpm"
-ovs_kmod_rpm_package: "openvswitch-kmod-{{ovs_version}}-1.el7.x86_64.rpm"
-el_tmp: "/tmp"
+ovs_rpm_package: "openvswitch"
+ovs_devel_rpm_package: "openvswitch-devel"
+ovs_selinux_rpm_package: "openvswitch-selinux-policy"
+ovs_kmod_rpm_package: "openvswitch-kmod"
 el_ovs_packages:
-    - "{{el_tmp}}/{{ovs_rpm_package}}"
-    - "{{el_tmp}}/{{ovs_devel_rpm_package}}"
-    - "{{el_tmp}}/{{ovs_selinux_rpm_package}}"
-    - "{{el_tmp}}/{{ovs_kmod_rpm_package}}"
+    - "{{ovs_rpm_package}}"
+    - "{{ovs_devel_rpm_package}}"
+    - "{{ovs_selinux_rpm_package}}"
+    - "{{ovs_kmod_rpm_package}}"
+
 ovs_deb_package: "openvswitch-switch_{{ovs_version}}-1_amd64.deb"
 ovs_common_deb_package: "openvswitch-common_{{ovs_version}}-1_amd64.deb"
 ovs_dp_dkms_deb_package: "openvswitch-datapath-dkms_{{ovs_version}}-1_all.deb"
