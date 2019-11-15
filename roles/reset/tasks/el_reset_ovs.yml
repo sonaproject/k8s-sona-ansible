@@ -1,0 +1,7 @@
+---
+  - block:
+    - name: "Remove OpenvSwitch"
+      yum:
+        name: openvswitch*
+        state: absent
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
