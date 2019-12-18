@@ -298,13 +298,7 @@ spec:
         args:
           - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t {{ token }} ;
             curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
-            sleep 5 ;
-            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
-            sleep 10 ;
-            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
-            sleep 10 ;
-            curl -s --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
-            sleep 10 ;
+            sleep 30 ;
             touch /tmp/ready ;
             while true ; do sleep 10 ; done
         volumeMounts:
