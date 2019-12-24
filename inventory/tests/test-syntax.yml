@@ -3,11 +3,11 @@
   connection: local
   become: true
   roles:
-    - { role: ../roles/atomix }
-    - { role: ../roles/cni }
+    - { role: ../roles/kubesona/atomix }
+    - { role: ../roles/kubesona/cni }
     - { role: ../roles/docker }
     - { role: ../roles/healthcheck }
     - { role: ../roles/helm }
     - { role: ../roles/kubernetes }
-    - { role: ../roles/onos }
+    - { role: ../roles/kubesona/onos }
     - { role: ../roles/ovs }
