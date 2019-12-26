@@ -3,7 +3,6 @@
   connection: local
   become: true
   roles:
-    - { role: ../roles/kubesona/atomix }
     - { role: ../roles/kubesona/cni }
     - { role: ../roles/docker }
     - { role: ../roles/healthcheck }
