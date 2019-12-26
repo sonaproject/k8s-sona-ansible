@@ -48,7 +48,6 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: kubesona/atomix, tags: atomix }
     - { role: kubesona/onos/main, tags: onos }
 
 - hosts: cluster

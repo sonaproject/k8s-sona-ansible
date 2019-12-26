@@ -32,6 +32,28 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: atomix-probe-scripts
+  namespace: kube-system
+data:
+  check-atomix-status: |
+    #!/bin/bash
+    set -e
+    
+    while true
+    do
+      check_str='curl -sL -w "%{http_code}\\n" "http://localhost:5678/v1/status" -o /dev/null'
+      if [ $(eval $check_str) == "200" ];
+      then
+        break
+      else
+        sleep 5s
+      fi
+    done 
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: onos-probe-scripts
   namespace: kube-system
 data:
@@ -137,6 +159,135 @@ data:
        main(sys.argv[1:])
 
 ---
+# This ConfigMap is used to configure a self-hosted atomix installation.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: atomix-config
+  namespace: kube-system
+data:
+  atomix.json: |-
+    {
+      "cluster": {
+        "node": {
+            "id": "atomix-1",
+            "address": "127.0.0.1:5679"
+        },
+        "clusterId": "onos",
+        "discovery": {
+            "nodes": [
+                {
+                    "id": "atomix-1",
+                    "address": "127.0.0.1:5679"
+                }
+            ],
+            "type": "bootstrap"
+        }
+      },
+      "partitionGroups": {
+        "raft": {
+            "partitionSize": 3,
+            "type": "raft",
+            "members": [
+                "atomix-1"
+            ],
+            "partitions": 1
+        }
+      },
+      "managementGroup": {
+        "partitionSize": 1,
+        "type": "raft",
+        "members": [
+            "atomix-1"
+        ],
+        "partitions": 1
+      }
+    }
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sona-atomix
+  namespace: kube-system
+  labels:
+    k8s-app: atomix
+spec:
+  serviceName: sona-atomix
+  selector:
+    matchLabels:
+      k8s-app: atomix
+  replicas: 1
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      name: sona-atomix
+      namespace: kube-system
+      labels:
+        k8s-app: atomix
+    spec:
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+      # These containers are run during pod initialization
+      initContainers:
+      - name: atomix-init
+        image: busybox
+        command: ["/bin/sh", "-c", "echo $ATOMIX_JSON > /tmp/atomix.json; cat /tmp/atomix.json"]
+        env:
+          - name: ATOMIX_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: atomix-config
+                key: atomix.json
+        volumeMounts:
+          - name: config
+            mountPath: /tmp
+            readOnly: false
+      containers:
+      - name: atomix
+        image: opensona/atomix-docker:k8s
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx2G
+        ports:
+        - name: client
+          containerPort: 5678
+        - name: server
+          containerPort: 5679
+        readinessProbe:
+          httpGet:
+            path: /v1/status
+            port: 5678
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /v1/status
+            port: 5678
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+        volumeMounts:
+          - name: config
+            mountPath: /root/atomix/config
+            readOnly: true
+      volumes:
+      - name: config
+        hostPath:
+          path: /tmp/atomix-config
+          type: DirectoryOrCreate
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -194,6 +345,16 @@ spec:
           - name: config
             mountPath: /tmp
             readOnly: false
+      - name: atomix-readiness-probe
+        image: opensona/python-docker
+        command: ["/bin/sh", "-c"]
+        args:
+          - /tmp/check-atomix-status ;
+            sleep 10
+        volumeMounts:
+          - name: atomix-probe-scripts
+            mountPath: /tmp/check-atomix-status
+            subPath: check-atomix-status
       containers:
       - name: onos
         image: opensona/onos-sona-nightly-docker:k8s
@@ -231,16 +392,20 @@ spec:
           periodSeconds: 15
           timeoutSeconds: 5
         volumeMounts:
-          - name: probe-scripts
+          - name: onos-probe-scripts
             mountPath: /root/onos/bin/check-onos-status
             subPath: check-onos-status
           - name: config
             mountPath: /root/onos/config
             readOnly: true
       volumes:
-      - name: probe-scripts
+      - name: onos-probe-scripts
         configMap:
           name: onos-probe-scripts
+          defaultMode: 0744
+      - name: atomix-probe-scripts
+        configMap:
+          name: atomix-probe-scripts
           defaultMode: 0744
       - name: config
         hostPath:
@@ -287,7 +452,7 @@ spec:
           - /tmp/check-sona-status ;
             sleep 30
         volumeMounts:
-          - name: probe-scripts
+          - name: sona-probe-scripts
             mountPath: /tmp/check-sona-status
             subPath: check-sona-status
       containers:
@@ -316,7 +481,7 @@ spec:
           configMap:
             name: kube-config-scripts
             defaultMode: 0744
-        - name: probe-scripts
+        - name: sona-probe-scripts
           configMap:
             name: sona-probe-scripts
             defaultMode: 0744
