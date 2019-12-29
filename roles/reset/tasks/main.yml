@@ -9,6 +9,15 @@
     state: absent
     path: ".kube/config"
 
+- name: "Remove CNI binaries, configs, directories"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /opt/cni/bin/sona
+    - /etc/sona
+    - /etc/cni
+
 - include_tasks: el_reset_k8s.yml
   when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
 
