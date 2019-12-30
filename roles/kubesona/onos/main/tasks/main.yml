@@ -6,7 +6,10 @@
     mode: 0755
 
 - name: "Copy ONOS yaml"
-  template: src=onos.yml.j2 dest={{ tmp_dir }}/onos.yml
+  copy:
+    src: "onos.yml"
+    dest: "{{ tmp_dir }}/onos.yml"
+    mode: 0644
 
 - name: "Install ONOS POD on kube-system namespace"
   shell: "kubectl apply -f {{ tmp_dir }}/onos.yml"

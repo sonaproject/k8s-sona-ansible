@@ -8,8 +8,8 @@ data:
   cluster.json: |-
     {
       "node": {
-          "ip": "{{ master_ip }}",
-          "id": "{{ master_ip }}",
+          "ip": "127.0.0.1",
+          "id": "127.0.0.1",
           "port": 9876
       },
       "storage": [
@@ -60,7 +60,7 @@ data:
   check-onos-status: |
     #!/bin/bash
     set -e
-    config=$(curl -s http://localhost:8181/onos/v1/cluster/{{ master_ip }} --user onos:rocks)
+    config=$(curl -s http://localhost:8181/onos/v1/cluster --user onos:rocks)
     echo $config
     printf '%q' $config | grep -q "READY"
 
@@ -93,7 +93,77 @@ metadata:
   name: kube-config-scripts
   namespace: kube-system
 data:
-  convert-kube-config.py: |
+  replace-master-ip.py: |-
+    #!/usr/bin/env python
+
+    import json, yaml, sys, getopt
+    from kubernetes import client, config
+
+    def master_ip():
+        config.load_kube_config()
+        api_instance = client.CoreV1Api()
+        master_str = "node-role.kubernetes.io/master"
+        node_list = api_instance.list_node()
+
+        for node in node_list.items:
+            node_labels = node.metadata.labels
+            for labels in node_labels:
+                # TODO: need to check whether the given master node has SONA POD
+                if master_str in labels:
+                    return get_node_address(node)
+        return None
+
+    def get_node_address(node):
+        node_status = node.status
+        for address in node_status.addresses:
+            if address.type == "InternalIP":
+                return address.address
+        return None
+
+    def main(argv):
+       inputfile = ''
+       outputfile = ''
+       try:
+          opts, args = getopt.getopt(argv,"ht:i:o:",["ifile=","ofile="])
+       except getopt.GetoptError:
+          print ('replace-master-ip.py -i <inputfile> -o <outputfile>')
+          sys.exit(2)
+
+       for opt, arg in opts:
+          if opt == '-h':
+             print ('replace-master-ip.py -i <inputfile> -o <outputfile>')
+             sys.exit()
+          elif opt in ("-i", "--ifile"):
+             inputfile = arg
+          elif opt in ("-o", "--ofile"):
+             outputfile = arg
+
+       with open(inputfile, 'r') as stream:
+          try:
+             raw = json.load(stream)
+             name = raw["name"]
+             storage = raw["storage"]
+             node_port = raw["node"]["port"]
+
+             cluster = {
+                "node": {
+                    "ip": master_ip(),
+                    "id": master_ip(),
+                    "port": node_port
+                },
+                "storage": storage,
+                "name": name
+             }
+          except yaml.YAMLError as exc:
+             print(exc)
+
+       with open(outputfile, "w") as jsonfile:
+          json.dump(cluster, jsonfile)
+
+    if __name__ == "__main__":
+       main(sys.argv[1:])
+
+  convert-kube-config.py: |-
     #!/usr/bin/env python
     
     import json, yaml, sys, getopt
@@ -101,23 +171,20 @@ data:
     def main(argv):
        inputfile = ''
        outputfile = ''
-       token = ''
        try:
-          opts, args = getopt.getopt(argv,"ht:i:o:",["token","ifile=","ofile="])
+          opts, args = getopt.getopt(argv,"ht:i:o:",["ifile=","ofile="])
        except getopt.GetoptError:
-          print ('convert-kube-config.py -t <token> -i <inputfile> -o <outputfile>')
+          print ('convert-kube-config.py -i <inputfile> -o <outputfile>')
           sys.exit(2)
 
        for opt, arg in opts:
           if opt == '-h':
-             print ('convert-kube-config.py -t <token> -i <inputfile> -o <outputfile>')
+             print ('convert-kube-config.py -i <inputfile> -o <outputfile>')
              sys.exit()
           elif opt in ("-i", "--ifile"):
              inputfile = arg
           elif opt in ("-o", "--ofile"):
              outputfile = arg
-          elif opt in ("-t", "--token"):
-             token = arg
 
        with open(inputfile, 'r') as stream:
           try:
@@ -139,7 +206,6 @@ data:
                 "scheme": scheme,
                 "ipAddress": ip_address,
                 "port": int(port),
-                "token": token,
                 "caCertData": ca_cert_data,
                 "clientCertData": client_cert_data,
                 "clientKeyData": client_key_data
@@ -325,7 +391,8 @@ spec:
         image: busybox
         command: ["/bin/sh", "-c"] 
         args:
-          - echo $CLUSTER_JSON > /tmp/cluster.json;
+          - echo $CLUSTER_JSON > /tmp/cluster.json.tmp;
+            /replace-master-ip.py -i /tmp/cluster.json.tmp -o /tmp/cluster.json
             cat /tmp/cluster.json;
             echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json;
             cat /tmp/component-cfg.json;
@@ -345,6 +412,11 @@ spec:
           - name: config
             mountPath: /tmp
             readOnly: false
+          - mountPath: /root/.kube/config
+            name: kube-config-file
+          - name: config-scripts
+            mountPath: /replace-master-ip.py
+            subPath: replace-master-ip.py
       - name: atomix-readiness-probe
         image: opensona/python-docker
         command: ["/bin/sh", "-c"]
@@ -411,6 +483,13 @@ spec:
         hostPath:
           path: /tmp/onos-config
           type: DirectoryOrCreate
+      - name: kube-config-file
+        hostPath:
+          path: /root/.kube/config
+      - name: config-scripts
+        configMap:
+          name: kube-config-scripts
+          defaultMode: 0744
 
 ---
 apiVersion: apps/v1
@@ -461,7 +540,7 @@ spec:
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
         args:
-          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json -t {{ token }} ;
+          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json ;
             curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
             sleep 30 ;
             touch /tmp/ready ;
