@@ -4,10 +4,16 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: reset/sona/master, tags: reset }
+    - { role: reset/sona/master/pre, tags: reset }
 
 - hosts: cluster
   gather_facts: yes
   become: yes
   roles:
     - { role: reset/sona/node, tags: reset }
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: reset/sona/master/post, tags: reset }

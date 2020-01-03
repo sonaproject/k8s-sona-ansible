@@ -1,0 +1,10 @@
+---
+
+- name: "Remove CoreDNS"
+  shell: "kubectl get po -n kube-system | grep coredns | awk '{print $1}' | while read line; do kubectl delete po $line -n kube-system; done"
+  ignore_errors: True
+
+- name: "Remove tiller"
+  shell: "kubectl get po -n kube-system | grep tiller | awk '{print $1}' | while read line; do kubectl delete po $line -n kube-system; done"
+  ignore_errors: True
+
