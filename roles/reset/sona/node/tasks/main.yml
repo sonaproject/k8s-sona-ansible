@@ -1,0 +1,28 @@
+---
+
+- name: "Remove CNI binaries, configs, directories"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /opt/cni/bin/sona
+    - /etc/sona
+    - /etc/cni
+
+- name: "Restart kubelet service in all cases, also issue daemon-reload to pick up config changes"
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: kubelet
+  
+- name: "Reset external bridge IP"
+  shell: "ip addr add $(ip -4 addr show kbr-ex | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')/24 dev {{ external_interface }}"
+  ignore_errors: True
+
+- name: "Reset OpenvSwitch"
+  shell: |
+    ovs-vsctl del-br kbr-int
+    ovs-vsctl del-br kbr-ex
+    ovs-vsctl del-br kbr-local
+  ignore_errors: True
+

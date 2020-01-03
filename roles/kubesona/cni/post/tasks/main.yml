@@ -1,7 +1,0 @@
----
-
-- include_tasks: el_config.yml
-  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
-
-- include_tasks: deb_config.yml
-  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

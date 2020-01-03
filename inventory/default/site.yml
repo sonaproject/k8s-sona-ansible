@@ -42,22 +42,9 @@
   become: yes
   roles:
     - { role: kubernetes/clean/node, tags: clean }
-    - { role: kubesona/cni/pre, tags: cni }
 
 - hosts: master
   gather_facts: yes
   become: yes
   roles:
-    - { role: kubesona/onos/main, tags: onos }
-
-- hosts: cluster
-  gather_facts: yes
-  become: yes
-  roles:
-    - { role: kubesona/cni/post, tags: cni }
-
-- hosts: master
-  gather_facts: yes
-  become: yes
-  roles:
-    - { role: kubesona/onos/sync, tags: onos }
+    - { role: kubesona, tags: kubesona }

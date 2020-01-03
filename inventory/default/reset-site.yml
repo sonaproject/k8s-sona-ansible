@@ -4,4 +4,4 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: reset, tags: reset }
+    - { role: reset/full, tags: reset }

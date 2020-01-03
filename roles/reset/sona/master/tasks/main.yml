@@ -1,0 +1,10 @@
+---
+
+- name: "Reset SONA nodes"
+  shell: "kubectl delete daemonset sona-node sona-dummy -n kube-system"
+  ignore_errors: True
+
+- name: "Reset SONA control plane"
+  shell: "kubectl delete statefulset sona-atomix sona-onos sona-onos-config -n kube-system"
+  ignore_errors: True
+
