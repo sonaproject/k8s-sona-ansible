@@ -3,10 +3,9 @@
   connection: local
   become: true
   roles:
-    - { role: ../roles/kubesona/cni }
     - { role: ../roles/docker }
     - { role: ../roles/healthcheck }
     - { role: ../roles/helm }
     - { role: ../roles/kubernetes }
-    - { role: ../roles/kubesona/onos }
+    - { role: ../roles/kubesona }
     - { role: ../roles/ovs }

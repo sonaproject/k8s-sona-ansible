@@ -8,5 +8,4 @@
     - { role: kubernetes/master }
     - { role: kubernetes/clean/master }
     - { role: kubernetes/clean/node }
-    - { role: kubesona/cni/pre }
-    - { role: kubesona/onos/main }
+    - { role: kubesona }
