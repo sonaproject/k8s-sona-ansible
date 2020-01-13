@@ -28,6 +28,14 @@
   shell: "ip addr add $(ip -4 addr show kbr-ex | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')/24 dev {{ external_interface }}"
   ignore_errors: True
 
+- name: "Remove ONOS directories"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /tmp/atomix-config
+    - /tmp/onos-config
+
 - name: "Reset OpenvSwitch"
   shell: |
     ovs-vsctl del-br kbr-int

@@ -346,76 +346,6 @@ metadata:
   name: kube-config-scripts
   namespace: kube-system
 data:
-  replace-master-ip.py: |-
-    #!/usr/bin/env python
-
-    import json, yaml, sys, getopt
-    from kubernetes import client, config
-
-    def master_ip():
-        config.load_kube_config()
-        api_instance = client.CoreV1Api()
-        master_str = "node-role.kubernetes.io/master"
-        node_list = api_instance.list_node()
-
-        for node in node_list.items:
-            node_labels = node.metadata.labels
-            for labels in node_labels:
-                # TODO: need to check whether the given master node has SONA POD
-                if master_str in labels:
-                    return get_node_address(node)
-        return None
-
-    def get_node_address(node):
-        node_status = node.status
-        for address in node_status.addresses:
-            if address.type == "InternalIP":
-                return address.address
-        return None
-
-    def main(argv):
-       inputfile = ''
-       outputfile = ''
-       try:
-          opts, args = getopt.getopt(argv,"ht:i:o:",["ifile=","ofile="])
-       except getopt.GetoptError:
-          print ('replace-master-ip.py -i <inputfile> -o <outputfile>')
-          sys.exit(2)
-
-       for opt, arg in opts:
-          if opt == '-h':
-             print ('replace-master-ip.py -i <inputfile> -o <outputfile>')
-             sys.exit()
-          elif opt in ("-i", "--ifile"):
-             inputfile = arg
-          elif opt in ("-o", "--ofile"):
-             outputfile = arg
-
-       with open(inputfile, 'r') as stream:
-          try:
-             raw = json.load(stream)
-             name = raw["name"]
-             storage = raw["storage"]
-             node_port = raw["node"]["port"]
-
-             cluster = {
-                "node": {
-                    "ip": master_ip(),
-                    "id": master_ip(),
-                    "port": node_port
-                },
-                "storage": storage,
-                "name": name
-             }
-          except yaml.YAMLError as exc:
-             print(exc)
-
-       with open(outputfile, "w") as jsonfile:
-          json.dump(cluster, jsonfile)
-
-    if __name__ == "__main__":
-       main(sys.argv[1:])
-
   convert-kube-config.py: |-
     #!/usr/bin/env python
     
@@ -641,11 +571,11 @@ spec:
       # These containers are run during pod initialization
       initContainers:
       - name: onos-init
-        image: busybox
+        image: opensona/sona-cni:latest
         command: ["/bin/sh", "-c"] 
         args:
           - echo $CLUSTER_JSON > /tmp/cluster.json.tmp;
-            /replace-master-ip.py -i /tmp/cluster.json.tmp -o /tmp/cluster.json
+            /replace-master-ip -i /tmp/cluster.json.tmp -o /tmp/cluster.json;
             cat /tmp/cluster.json;
             echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json;
             cat /tmp/component-cfg.json;
@@ -666,9 +596,6 @@ spec:
             readOnly: false
           - mountPath: /root/.kube/config
             name: kube-config-file
-          - name: config-scripts
-            mountPath: /replace-master-ip.py
-            subPath: replace-master-ip.py
       - name: atomix-readiness-probe
         image: opensona/python-docker
         command: ["/bin/sh", "-c"]
