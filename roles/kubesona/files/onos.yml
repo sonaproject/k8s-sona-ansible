@@ -15,19 +15,19 @@ data:
     # Configuration options for ONOS CNI plugin endpoint
     [network]
     # Overlay network type (VXLAN, GRE, GENEVE).
-    type = __TUNNEL_TYPE__
+    type = VXLAN
     # Segment identifier of the network.
     segment_id = 100
     # External uplink interface name.
-    external_interface = __EXTERNAL_INTERFACE__
+    external_interface = ens7
     # External gateway IP address.
-    external_gateway_ip = __EXTERNAL_GATEWAY_IP__
+    external_gateway_ip = 172.16.230.1
     # Transient network CIDR.
     transient_cidr = 172.10.0.0/16
     # Service network CIDR.
     service_cidr = 10.96.0.0/12
     # Network Maximum Transmission Unit (MTU).
-    mtu = __MTU_SIZE__
+    mtu = 1400
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
