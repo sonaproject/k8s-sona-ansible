@@ -1,3 +1,8 @@
 ---
 - name: "Remove kube-proxy"
   shell: "kubectl delete ds kube-proxy -n kube-system"
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 1
+  ignore_errors: yes
