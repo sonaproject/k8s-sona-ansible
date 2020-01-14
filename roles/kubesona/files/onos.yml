@@ -772,6 +772,7 @@ spec:
             /check-node-state.sh ;
             curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/states ;
             curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
+            sleep 30 ;
             curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/rules ;
             while true ; do sleep 10 ; done
         volumeMounts:
