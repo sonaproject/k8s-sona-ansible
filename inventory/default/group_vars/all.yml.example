@@ -14,12 +14,12 @@ kubeadm_opts: ""
 # kubeadm_opts: '--apiserver-cert-extra-sans "k8s.domain.com,kubernetes.domain.com"'
 
 # Network parameters
-service_cidr: "10.96.0.0/12"
-pod_network_cidr: "10.10.0.0/16"
+srv_cidr: "10.96.0.0/12"
+pod_net_cidr: "10.10.0.0/16"
 overlay_type: "VXLAN"
-segment_id: 100
-external_interface: "eth1"
-external_gateway_ip: "192.168.57.1"
+seg_id: 100
+ext_intf: "eth1"
+ext_gw_ip: "192.168.57.1"
 mtu: 1400
 
 # Change this to an appropriate interface, preferably a private network.

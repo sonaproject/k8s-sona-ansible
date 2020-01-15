@@ -17,15 +17,13 @@ data:
     # Overlay network type (VXLAN, GRE, GENEVE).
     type = {{ overlay_type | default('VXLAN') }}
     # Segment identifier of the network.
-    segment_id = {{ segment_id | default(100) }}
+    segment_id = {{ seg_id | default(100) }}
     # External uplink interface name.
-    external_interface = {{ external_interface | default('eth1') }}
+    external_interface = {{ ext_intf | default('eth1') }}
     # External gateway IP address.
-    external_gateway_ip = {{ external_gateway_ip | default('192.168.1.1') }}
-    # Transient network CIDR.
-    # transient_cidr = 172.10.0.0/16
+    external_gateway_ip = {{ ext_gw_ip | default('192.168.1.1') }}
     # Service network CIDR.
-    service_cidr = {{ service_cidr | default('10.96.0.0/12') }}
+    service_cidr = {{ srv_cidr | default('10.96.0.0/12') }}
     # Network Maximum Transmission Unit (MTU).
     mtu = {{ mtu | default(1400) }}
 
