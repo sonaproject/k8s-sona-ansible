@@ -6,3 +6,11 @@
   retries: 10
   delay: 1
   ignore_errors: yes
+
+- name: "Wait for all kube-proxy PODs to be removed"
+  shell: "kubectl get po -n kube-system"
+  register: task_result
+  retries: 100
+  delay: 5
+  until: task_result.stdout_lines | select('search','kube-proxy') | list | count == 0
+  ignore_errors: yes
