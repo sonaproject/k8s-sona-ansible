@@ -33,9 +33,11 @@
 
 - name: Deploy kubernetes dashboard into cluster
   when: init_cluster is succeeded and enable_dashboard
-  command: |
+  shell: |
     kubectl --kubeconfig={{ kubeadmin_config }} \
-        apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta5/aio/deploy/recommended.yaml
+        apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+    kubectl apply -f {{ role_path }}/files/admin-user.yml
+    kubectl apply -f {{ role_path }}/files/admin-role-binding.yml
   register: create_result
   until: create_result.rc == 0
   retries: 5
