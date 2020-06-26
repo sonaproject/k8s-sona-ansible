@@ -18,6 +18,7 @@
     daemon_reload: yes
     state: started
     enabled: yes
+  become: true
 
 - name: Restart kubelet service
   service:

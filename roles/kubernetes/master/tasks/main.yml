@@ -27,10 +27,18 @@
     state: restarted
   become: true 
 
+- name: Adjust the admin.conf access permission
+  file:
+    path: "{{ kubeadmin_config }}"
+    mode: u=rwX,g=rX,o=rX
+  become: true
+
 - name: "Copy config file"
   fetch:
-    src: /etc/kubernetes/admin.conf 
-    dest: "{{ lookup('env', 'HOME') }}/admin.conf"
+    src: "{{ kubeadmin_config }}"
+    dest: "{{ lookup('env', 'HOME') }}/.kube/config"
     flat: yes
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+    group: "{{ ansible_user | default(ansible_user_id) }}"
   run_once: yes
-  ignore_errors: yes
+  become: true

@@ -5,6 +5,9 @@
 kube_version: 1.15.6
 token: b0f7b8.8d1767876297d85c
 
+# Enforce to use python3
+ansible_python_interpreter: /usr/bin/python3
+
 # 1.8.x feature: --feature-gates SelfHosting=true
 init_opts: ""
 
