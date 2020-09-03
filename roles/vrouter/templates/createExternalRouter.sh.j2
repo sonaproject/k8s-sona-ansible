@@ -1,0 +1,45 @@
+#/usr/bin/bash
+
+#floatingCidr=$(cat externalRouterConfig.ini | grep floatingCidr | awk '{print$3}')
+#floatingCidr=$(echo $floatingCidr | tr -d '"')
+#externalPeerMac=$(cat externalRouterConfig.ini | grep externalPeerMac | awk '{print$3}')
+#externalPeerMac=$(echo $externalPeerMac | tr -d '"')
+floatingCidr={{ ext_gw_ip }}/24
+externalPeerMac=fa:00:00:00:00:01
+currentPath=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+index={{groups['cluster'].index(inventory_hostname)}}
+baseIp=`echo 172.40.0.1 | cut -d"." -f1-3`
+routerIndex=$((index+2))
+routerIp=$baseIp"."$routerIndex
+
+if [ -z $floatingCidr ]; then
+  echo "floatingCidr is empty. Please fix externelRouterConfig.ini"
+  exit 1
+fi
+
+if [ -z $externalPeerMac ]; then
+  echo "externalPeerMac is empty. Please fix externelRouterConfig.ini"
+  exit 1
+fi
+
+echo && echo "externalRouterConfig.ini"
+cat externalRouterConfig.ini
+
+echo && echo "pulling opensona/router-docker"
+sudo docker pull opensona/router-docker
+echo && echo "pulling done"
+
+echo && echo "deleting existing container and port"
+sudo docker stop router
+sudo docker rm router
+sudo ovs-vsctl del-port router
+echo && echo "deleting done"
+
+echo && echo "running external router container"
+sudo docker run --privileged --cap-add=NET_ADMIN --cap-add=NET_RAW --name router --hostname router -d opensona/router-docker
+sudo $currentPath/pipework kbr-ex -i eth1 -l {{ ext_intf }} {{ ext_intf }} $floatingCidr $externalPeerMac
+sudo docker exec -d router iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+echo && echo "running done"
+sudo docker ps
+
+sudo ifconfig {{ ext_intf }} $routerIp

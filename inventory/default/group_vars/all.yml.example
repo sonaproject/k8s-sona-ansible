@@ -2,7 +2,7 @@
 # ansible_user: root
 
 # Kubernetes
-kube_version: 1.15.6
+kube_version: 1.17.11
 token: b0f7b8.8d1767876297d85c
 
 # Enforce to use python3
@@ -21,8 +21,8 @@ srv_cidr: "10.96.0.0/12"
 pod_net_cidr: "10.10.0.0/16"
 overlay_type: "VXLAN"
 seg_id: 100
-ext_intf: "eth1"
-ext_gw_ip: "192.168.57.1"
+ext_intf: "router"
+ext_gw_ip: "172.40.0.1"
 mtu: 1400
 
 # Change this to an appropriate interface, preferably a private network.
@@ -54,3 +54,6 @@ onos_config_tmp_dir: /tmp/onos-config
 
 # temporary directory used by SONA-CNI
 sona_cni_tmp_dir: /tmp/sona-cni
+
+# vRouter directory
+vrouter_dir: /tmp/vrouter

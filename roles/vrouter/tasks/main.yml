@@ -1,0 +1,25 @@
+---
+- name: "Copy vrouter"
+  git: 
+    repo: https://github.com/sonaproject/sona-setup.git
+    dest: "{{ vrouter_dir }}"
+    force: yes
+    clone: yes
+
+- name: "Generate kbr-ex bridge"
+  shell: "ovs-vsctl add-br kbr-ex"
+  become: true
+
+- name: "Copy create shell script file"
+  template: src="createExternalRouter.sh.j2" dest="{{ vrouter_dir }}/createExternalRouter.sh"
+
+- name: "Copy vrouter configuration file"
+  template: src="externalRouterConfig.ini.j2" dest="{{ vrouter_dir }}/externalRouterConfig.ini"
+
+- name: "Start vRouter"
+  shell: "{{ vrouter_dir }}/createExternalRouter.sh"
+  become: true
+
+- name: "Store iptables rules for later use"
+  shell: "iptables-save > /tmp/savedrules.txt"
+  become: true

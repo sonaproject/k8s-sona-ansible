@@ -47,6 +47,12 @@
     rmmod openvswitch
   ignore_errors: True
 
+- name: "Remove vRouter container"
+  shell: |
+    docker stop router
+    docker rm router
+  ignore_errors: True
+
 - include_tasks: el_reset_ovs.yml
   when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
 

@@ -5,3 +5,8 @@
     iptables -t mangle -F
     iptables -F
     iptables -X
+  become: true
+
+- name: "Restore old iptables rules for docker"
+  shell: "iptables-restore < /tmp/savedrules.txt"
+  become: true
