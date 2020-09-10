@@ -387,7 +387,7 @@ data:
                 "scheme": scheme,
                 "ipAddress": ip_address,
                 "port": int(port),
-                "dvr": true,
+                "dvr": True,
                 "caCertData": ca_cert_data,
                 "clientCertData": client_cert_data,
                 "clientKeyData": client_key_data
@@ -502,7 +502,7 @@ spec:
             readOnly: false
       containers:
       - name: atomix
-        image: opensona/atomix-docker:k8s
+        image: opensona/atomix-docker:dev
         imagePullPolicy: IfNotPresent
         env:
         - name: JAVA_OPTS
@@ -607,7 +607,7 @@ spec:
             subPath: check-atomix-status
       containers:
       - name: onos
-        image: opensona/onos-sona-nightly-docker:k8s
+        image: opensona/onos-sona-nightly-docker:dev
         imagePullPolicy: Always
         env:
         - name: JAVA_OPTS
@@ -623,24 +623,24 @@ spec:
           containerPort: 8101
         - name: ui
           containerPort: 8181
-        readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - /root/onos/bin/check-onos-status
-          initialDelaySeconds: 30
-          periodSeconds: 15
-          failureThreshold: 10
-        livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - /root/onos/bin/check-onos-status
-          initialDelaySeconds: 300
-          periodSeconds: 15
-          timeoutSeconds: 5
+        #readinessProbe:
+        #  exec:
+        #    command:
+        #    - sh
+        #    - -c
+        #    - /root/onos/bin/check-onos-status
+        #  initialDelaySeconds: 30
+        #  periodSeconds: 15
+        #  failureThreshold: 10
+        #livenessProbe:
+        #  exec:
+        #    command:
+        #    - sh
+        #    - -c
+        #    - /root/onos/bin/check-onos-status
+        #  initialDelaySeconds: 300
+        #  periodSeconds: 15
+        #  timeoutSeconds: 5
         volumeMounts:
           - name: onos-probe-scripts
             mountPath: /root/onos/bin/check-onos-status
